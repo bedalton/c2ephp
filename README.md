@@ -5,10 +5,12 @@
 
 This is a fork for personal use that changes the case of all commands from the original telyn/c2ephp repository. It is also namespaced and uses IntelliJ style PHP comment formats. Probably not useful for anyone else, as it is not in sync with the original repository.
 
-# Bedalton TODO
+## Bedalton TODO
 
 - Fix tests after refactor
 
+
+# Usage
 To use:
 checkout to a folder
 require_once c2ephp.php
