@@ -1,0 +1,8 @@
+{
+    "name": "bedalton/c2ephp",
+    "description": "Suite of utilities for parsing Creatures game files",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {}
+}
