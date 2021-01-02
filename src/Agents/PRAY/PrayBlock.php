@@ -1,6 +1,6 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 
 use Exception;
@@ -10,7 +10,7 @@ include_once dirname(__FILE__) . './pray_constants.php';
 /**
  * Abstract class to represent PRAY blocks
  *
- * @package C2ePhp\PRAY
+ * @package C2ePhp\Agents\PRAY
  */
 abstract class PrayBlock {
     /// @cond INTERNAL_DOCS
@@ -25,6 +25,8 @@ abstract class PrayBlock {
     private $type;
     /** @var bool */
     private $decompiled;
+    /** @var string */
+    private $rawContents;
     /** @var int */
     private $flags;
 
@@ -54,6 +56,7 @@ abstract class PrayBlock {
             $this->decompiled = true;
         }
         $this->name = $name;
+        $this->rawContents = $content;
         $this->content = $content;
         $this->flags = $flags;
         $this->type = $type;
@@ -126,6 +129,14 @@ abstract class PrayBlock {
             $this->setFlagsOff(PRAY_FLAG_ZLIB_COMPRESSED);
         }
         return $this->content;
+    }
+
+    /**
+     * Gets the initial content for this pray block
+     * @return string
+     */
+    function getRawContent() {
+        return $this->rawContents;
     }
 
     /**
@@ -252,8 +263,9 @@ abstract class PrayBlock {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief Compiles the block data
     /**
+     * Compiles the block data
+     *
      * return The compiled block data as a string.
      */
     protected abstract function compileBlockData();
