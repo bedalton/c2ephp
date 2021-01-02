@@ -1,21 +1,23 @@
 <?php
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 
 require_once(dirname(__FILE__) . '/PrayBlock.php');
 
-/// @brief The class for a GENE block
 /**
- * The contents are identical to that of a .gen file\n
+ * The class for a GENE block
+ *
+ * The contents are identical to that of a .gen file
  * This class doesn't have any useful functions yet - I don't
  * actually know how to decode genetics at the moment.
  */
 class GENEBlock extends PrayBlock {
 
-    /// @brief Creates a new GENEBlock
     /**
+     * Creates a new GENEBlock
+     *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
      * @param PRAYFile $prayFile The PRAYFile object this block belongs to. Can be null.

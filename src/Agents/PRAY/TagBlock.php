@@ -1,12 +1,13 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
-/// @brief Base block class for working with tag-type blocks
 use C2ePhp\Support\StringReader;
 use Exception;
 
 /**
+ * Base block class for working with tag-type blocks
+ *
  * This includes (but may not be limited to) agents
  * (AGNTBlock,DSAGBlock), creatures (EXPCBlock,DSEXBlock) and starter
  * families (SFAMBlock,DFAMBlock) \n
@@ -22,12 +23,13 @@ use Exception;
 abstract class TagBlock extends PrayBlock {
     /// @cond INTERNAL_DOCS
 
-    /** @var mixed */
+    /** @var string[]|int[] */
     private $tags;
 
-    /// @brief Creates a new TagBlock
-
-    /** This should be called by all subclasses from their constructors.
+    /**
+     * Creates a new TagBlock
+     *
+     * This should be called by all subclasses from their constructors.
      * @param PRAYFile|PrayBlock[] $prayFile The prayFile this block is contained in, or for TagBlocks being created from scratch, the initial tags array. Can be null.
      * @param string $name The name of the block. Cannot be null.
      * @param string $content The binary data this block contains. Can be null.
@@ -67,7 +69,7 @@ abstract class TagBlock extends PrayBlock {
      * This is mainly useful for people writing subclasses of TagBlock.
      * If you have to write code that uses GetTags in your application,
      * please file a bug report!
-     * @return mixed[]
+     * @return string[]|int[]
      */
     public function getTags() {
         $this->ensureDecompiled();
@@ -80,7 +82,7 @@ abstract class TagBlock extends PrayBlock {
      * Sets the tag with the given value, overwriting or creating the tag as needed.
      * Generally setters ought to be used in subclasses of TagBlock.
      * @param string $tag Name of the tag to set
-     * @param mixed $value The value to set the tag to
+     * @param string|int $value The value to set the tag to
      */
     public function setTag($tag, $value) {
         $this->ensureDecompiled();
