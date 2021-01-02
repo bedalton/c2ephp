@@ -3,11 +3,22 @@
 
 /// @cond INTERNAL_DOCS
 
-/// @brief DS CAOS flow control (doif, else, loop, etc) dictionary
-class DSCAOSFlowControls {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\C3;
+
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+/**
+ * C3 CAOS flow control (doif, else, loop, etc) dictionary
+ */
+class C3CAOSFlowControls implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
+
             'doif',
             'econ',
             'elif',
@@ -34,8 +45,10 @@ class DSCAOSFlowControls {
             'slow',
             'subr',
             'untl',
+
         );
     }
 }
+
 /// @endcond
 

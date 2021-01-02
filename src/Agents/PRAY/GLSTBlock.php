@@ -1,13 +1,17 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use C2ePhp\CreatureHistory\CreatureHistory;
 use C2ePhp\CreatureHistory\CreatureHistoryEvent;
 use C2ePhp\Support\StringReader;
 use Exception;
 
-/// @brief PRAY Block for Creature History Data.
+/**
+ * PRAY Block for Creature History Data.
+ *
+ * @package C2ePhp\Agents\PRAY
+ */
 class GLSTBlock extends CreaturesArchiveBlock {
 
     /// @cond INTERNAL_DOCS
@@ -104,9 +108,9 @@ class GLSTBlock extends CreaturesArchiveBlock {
         }
     }
 
-    /// @brief Gets a PHOTBlock corresponding to the given
-    /// CreatureHistoryEvent.
     /**
+     * Gets a PHOTBlock corresponding to the given CreatureHistoryEvent.
+     *
      * This only works in a GLSTBlock that has been read from a
      * PRAYFile - and even then it may throw exceptions. Be cautious
      * and handle errors.
@@ -226,9 +230,9 @@ class GLSTBlock extends CreaturesArchiveBlock {
         return false;
     }
 
-
-    /// @brief Compiles the block into binary for PrayBlock
     /**
+     * Compiles the block into binary for PrayBlock
+     *
      * @param int $format One of the GLST_FORMAT_* constants
      * @return false|string compiled block data for Compile()
      */

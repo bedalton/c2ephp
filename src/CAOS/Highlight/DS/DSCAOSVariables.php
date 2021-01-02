@@ -1,14 +1,21 @@
-<?php /** @noinspection SpellCheckingInspection */
-/** @noinspection PhpUnused */
+<?php
+namespace C2ePhp\CAOS\Highlight\DS;
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
 
+/** @noinspection PhpUnused */
 /// @cond INTERNAL_DOCS
 
-/// @brief C3 CAOS built-in variables dictionary
 /**
- *  OVxx, VAxx and MVxx are handled by the CAOS highlighter internally
+ * DS CAOS built-in variables dictionary
+ *
+ * OVxx, VAxx and MVxx are handled by the CAOS highlighter internally
  */
-class C3CAOSVariables {
-    /// @brief Returns an array of tokens.
+class DSCAOSVariables implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             //agents
@@ -160,9 +167,16 @@ class C3CAOSVariables {
             'wnam',
             'wuid',
 
+            //net
+            'net: erra',
+            'net: host',
+            'net: rawe',
+            'net: user',
+            'net: what'
         );
     }
 }
 
 /// @endcond
+
 

@@ -5,10 +5,8 @@ namespace C2ePhp\Sprites;
 use C2ePhp\Support\IReader;
 use Exception;
 
-/// @brief Class for a single image in a C16File
-
 /**
- *
+ * Class for a single image in a C16File
  */
 class C16Frame extends SpriteFrame {
     /// @cond INTERNAL_DOCS
@@ -56,7 +54,11 @@ class C16Frame extends SpriteFrame {
         }
     }
 
-    // @brief Sets the encoding to use when compiling
+    /**
+     * Sets the encoding to use when compiling
+     *
+     * @param $encoding
+     */
     public function setEncoding($encoding) {
         $this->ensureDecoded();
         $this->encoding = $encoding;
@@ -64,8 +66,9 @@ class C16Frame extends SpriteFrame {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief Decodes the C16Frame
     /**
+     * Decodes the C16Frame
+     *
      * Called automatically by EnsureDecompiled.
      * @throws Exception
      */
@@ -117,8 +120,9 @@ class C16Frame extends SpriteFrame {
     }
     /// @endcond
 
-    /// @brief Encodes the C16Frame into a C16 binary string
     /**
+     * Encodes the C16Frame into a C16 binary string
+     *
      * Produces a string suitable for use as a PHOTO block, for example.
      * This is called automatically by C16File's Compile function.
      * @throws Exception

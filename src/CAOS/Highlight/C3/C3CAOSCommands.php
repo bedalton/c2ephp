@@ -3,9 +3,16 @@
 
 /// @cond INTERNAL_DOCS
 
-/// @brief C3 CAOS commands dictionary
-class C3CAOSCommands {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\C3;
+
+/// C3 CAOS commands dictionary
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+class C3CAOSCommands implements HasTokens {
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             'alph',

@@ -1,6 +1,6 @@
 <?php
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 
@@ -13,8 +13,9 @@ use Exception;
  */
 class SFAMBlock extends EXPCBlock {
 
-    /// @brief Instantiates a new SFAMBlock
     /**
+     * Instantiates a new SFAMBlock
+     *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
      * @param PRAYFile $prayFile The PRAYFile that this DFAM block belongs to.

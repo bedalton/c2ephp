@@ -2,8 +2,9 @@
 
 namespace C2ePhp\Support;
 
-/// @brief Interface for reading data.
 /**
+ * Interface for reading data.
+ *
  * This is implemented by StringReader and FileReader to allow the
  * main c2ephp classes to read data from strings and files with a
  * consistent and simple OO interface. \n
@@ -49,9 +50,10 @@ interface IReader {
      * @return integer
      */
     public function getPosition();
-    /// @brief Changes the current position in the reader's stream
 
     /**
+     * Changes the current position in the reader's stream
+     *
      * This is analogous to fseek in C or PHP.
      * @param int $position
      * @return void
