@@ -14,8 +14,9 @@ class COBDependency {
 
     /// @endcond
 
-    /// @brief Creates a new COBDependency
     /**
+     * Creates a new COBDependency
+     *
      * @param string $type The type of dependency ('sprite' or 'sound').
      * @param string $name The name of the dependency (four characters, no file extension)
      */
@@ -23,14 +24,18 @@ class COBDependency {
         $this->type = $type;
         $this->name = $name;
     }
-    /// @brief Gets the dependency type
-    /** @return string
+
+    /**
+     * Gets the dependency type
+     * @return string
      */
     public function getType() {
         return $this->type;
     }
-    /// @brief Gets the name of the dependency
-    /** @return string
+    /**
+     * Gets the name of the dependency
+     *
+     * @return string
      */
     public function getName() {
         return $this->name;

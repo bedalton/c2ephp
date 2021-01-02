@@ -3,7 +3,11 @@
 namespace C2ePhp\CreatureHistory;
 require_once(dirname(__FILE__) . '/constants.php');
 
-/// @brief Class to represent events in a creature's life
+/**
+ * Class to represent events in a creature's life
+ *
+ * @package C2ePhp\CreatureHistory
+ */
 class CreatureHistoryEvent {
 
     /// @cond INTERNAL_DOCS
@@ -147,9 +151,10 @@ class CreatureHistoryEvent {
         return $this->timestamp;
     }
 
-    /// @brief Accessor method for life stage
 
     /**
+     * Accessor method for life stage
+     *
      * @return int The creature's life stage (an integer, 0-6 I think.
      * 0xFF means unborn.) \n
      * TODO: Make a set of constants for this.
@@ -158,9 +163,10 @@ class CreatureHistoryEvent {
         return $this->lifeStage;
     }
 
-    /// @brief Accessor method for moniker 1
 
     /**
+     * Accessor method for moniker 1
+     *
      * Moniker 1 is the first moniker associated with this event.
      * In conception and splicing, it is one of the parent
      * creatures. \n
@@ -177,24 +183,24 @@ class CreatureHistoryEvent {
         return $this->moniker1;
     }
 
-    /// @brief Accessor method for moniker 2
-
     /**
-     * Moniker 2 is the second moniker associated with this event. \n
+     * Accessor method for moniker 2
+     *
+     * Moniker 2 is the second moniker associated with this event.
      * In conception and splicing, it is one of the conceiving
-     * creatures. \n
-     * In becoming pregnant, it's the child's moniker \n
-     * In making another pregnant, it's the child's moniker \n
-     * In a child being born, it's the child's moniker \n
+     * creatures.
+     * In becoming pregnant, it's the child's moniker
+     * In making another pregnant, it's the child's moniker
+     * In a child being born, it's the child's moniker
      * @return string The first moniker associated with this event
      */
     public function getMoniker2() {
         return $this->moniker2;
     }
 
-    /// @brief Accessor method for user text
-
     /**
+     * Accessor method for user text
+     *
      * In theory user text can be used on any event without messing
      * it up (and it would be readable via CAOS) See
      * http://nornalbion.github.com/c2ephp/caos-guide.html#HIST%20FOTO
@@ -209,9 +215,9 @@ class CreatureHistoryEvent {
         return $this->userText;
     }
 
-    /// @brief Accessor method for photograph
-
     /**
+     * Accessor method for photograph
+     *
      * Gets the name of the PHOT block containing the S16File
      * of the photograph for this event. \n
      * In theory this can be used on any event without messing

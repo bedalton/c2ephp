@@ -2,9 +2,18 @@
 /** @noinspection PhpUnused */
 /// @cond INTERNAL_DOCS
 
-/// @brief DS CAOS commands dictionary
-class DSCAOSCommands {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\DS;
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+/**
+ * DS CAOS commands dictionary
+ */
+class DSCAOSCommands implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             'alph',

@@ -1,14 +1,21 @@
 <?php /** @noinspection SpellCheckingInspection */
 /** @noinspection PhpUnused */
 
+namespace C2ePhp\CAOS\Highlight\DS;
 /// @cond INTERNAL_DOCS
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
 
-/// @brief C3 CAOS flow control (doif, else, loop, etc) dictionary */
-class C3CAOSFlowControls {
-    /// @brief Returns an array of tokens.
+/**
+ * DS CAOS flow control (doif, else, loop, etc) dictionary
+ */
+class DSCAOSFlowControls implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
-
             'doif',
             'econ',
             'elif',
@@ -35,10 +42,8 @@ class C3CAOSFlowControls {
             'slow',
             'subr',
             'untl',
-
         );
     }
 }
-
 /// @endcond
 

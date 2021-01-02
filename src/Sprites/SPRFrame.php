@@ -81,7 +81,9 @@ class SPRFrame extends SpriteFrame {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief Decodes the SPRFrame into a gd image.
+    /**
+     * Decodes the SPRFrame into a gd image.
+     */
     protected function decode() {
         $image = imagecreatetruecolor($this->getWidth(), $this->getHeight());
         $this->reader->seek($this->offset);
@@ -98,9 +100,9 @@ class SPRFrame extends SpriteFrame {
 
     /// @endcond
 
-
-    /// @brief Encodes the SPRFrame.
     /**
+     * Encodes the SPRFrame.
+     *
      * Called automatically by SPRFile::Compile() \n
      * Generally end-users won't want a single frame of SPR data,
      * so add it to an SPRFile and call SPRFile::Compile().

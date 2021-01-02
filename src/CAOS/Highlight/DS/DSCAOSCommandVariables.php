@@ -1,11 +1,19 @@
 <?php /** @noinspection SpellCheckingInspection */
 /** @noinspection PhpUnused */
 
+namespace C2ePhp\CAOS\Highlight\DS;
 /// @cond INTERNAL_DOCS
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
 
-/// @brief DS CAOS dictionary of tokens that can act like commands or variables
-class DSCAOSCommandVariables {
-    /// @brief Returns an array of tokens.
+/**
+ * DS CAOS dictionary of tokens that can act like commands or variables
+ */
+class DSCAOSCommandVariables implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             'attr',

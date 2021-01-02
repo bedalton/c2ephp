@@ -3,9 +3,19 @@
 
 /// @cond INTERNAL_DOCS
 
-/// @brief Valid C3 CAOS operators
-class C3CAOSOperators {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\C3;
+
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+/**
+ * Valid C3 CAOS operators
+ */
+class C3CAOSOperators implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
         '=',

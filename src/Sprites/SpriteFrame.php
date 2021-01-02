@@ -2,10 +2,11 @@
 
 namespace C2ePhp\Sprites;
 
-/// @brief Class representing a single frame of a sprite.
 use Exception;
 
 /**
+ * Class representing a single frame of a sprite.
+ *
  * All SpriteFrame classes may also be used in the absence of a
  * parent SpriteFile.
  */
@@ -22,8 +23,9 @@ abstract class SpriteFrame {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief Initialises a SpriteFrame
     /**
+     * Initialises a SpriteFrame
+     *
      * Width and height must both be non-zero.
      * @param int $width
      * @param int $height
@@ -170,9 +172,9 @@ abstract class SpriteFrame {
         }
     }
 
-    /// @brief Converts this SpriteFrame into a PNG.
-
     /**
+     * Converts this SpriteFrame into a PNG.
+     *
      * @return string binary string in PNG format, ready for output! :)
      */
     public function toPNG() {

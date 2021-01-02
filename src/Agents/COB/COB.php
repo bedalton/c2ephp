@@ -21,10 +21,8 @@ define('COB_FORMAT_C1', 'C1');
 define('COB_FORMAT_C2', 'C2');
 ///@}
 
-/// @brief Class that interacts with COB files (c1 and c2 formats)
-
 /**
- * Class COB
+ * Class that interacts with COB files (c1 and c2 formats)
  * @package C2ePhp
  */
 class COB {
@@ -129,9 +127,10 @@ class COB {
             $this->blocks[] = COBAgentBlock::createFromReaderC1($reader);
         }
     }
-    /// @brief Adds a COBBlock to this COB
 
     /**
+     * Adds a COBBlock to this COB
+     *
      * @param COBBlock $block the block to add.
      */
     public function addBlock(COBBlock $block) {

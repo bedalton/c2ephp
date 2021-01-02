@@ -1,6 +1,6 @@
 <?php
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 
@@ -14,8 +14,10 @@ require_once(dirname(__FILE__) . '/TagBlock.php');
  * simple extends EXPC.
  */
 class DSEXBlock extends EXPCBlock {
-    /// @brief Instantiates a DSEXBlock
+
     /**
+     * Instantiates a DSEXBlock
+     *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
      * @param PRAYFile $prayFile The PRAYFile that this DFAM block belongs to.

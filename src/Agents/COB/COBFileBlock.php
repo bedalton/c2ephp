@@ -2,10 +2,14 @@
 
 namespace C2ePhp\Agents\COB;
 
-/// @brief Defines the bock to represent a file block in a COB file.
 use C2ePhp\Support\IReader;
 use Exception;
 
+/**
+ * Defines the bock to represent a file block in a COB file.
+ *
+ * @package C2ePhp\Agents\COB
+ */
 class COBFileBlock extends COBBlock {
 
     /// @cond INTERNAL_DOCS
@@ -23,7 +27,7 @@ class COBFileBlock extends COBBlock {
     /// @endcond
 
     /**
-     * @brief Constructs a new COBFileBlock
+     * Constructs a new COBFileBlock
      * @param string $type The file type
      * @param string $name The file name (including extension)
      * @param string $contents The contents of the file

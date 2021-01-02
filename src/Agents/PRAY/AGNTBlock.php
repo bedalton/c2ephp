@@ -1,14 +1,18 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
-/// @brief Represents an AGNT block in a PRAY file, used for C3 Agent scripts and metadata.
 use C2ePhp\Sprites\C16File;
 use C2ePhp\Sprites\S16File;
 use C2ePhp\Support\StringReader;
 use Exception;
 
+/**
+ * Represents an AGNT block in a PRAY file, used for C3 Agent scripts and metadata.
+ */
 class AGNTBlock extends TagBlock {
+
+    private $scriptCount;
 
     /**
      * Instantiate a new AGNTBlock
@@ -74,14 +78,16 @@ class AGNTBlock extends TagBlock {
      * @return int
      */
     public function getScriptCount() {
-        return $this->getTag('Script Count');
+        if (!isset($this->scriptCount))
+            return $this->scriptCount = $this->getTag('Script Count');
+        return $this->scriptCount;
     }
 
     /**
      * Gets the specified script by index in array
      *
      * Gets the first script, or if you specified which script, that one.
-     * @param string $script Which script to get as an integer. The first script is script 1.
+     * @param int $script Which script to get as an integer. The first script is script 1.
      * @return string
      * @throws Exception
      */
@@ -90,7 +96,20 @@ class AGNTBlock extends TagBlock {
             return $this->getTag('Script '.$script);
         }
         throw new Exception("Script doesn't exist!");
+    }
 
+    /**
+     * Attempts to get all scripts in this agent
+     *
+     * @return array
+     */
+    public function getScripts() {
+        $numScripts = $this->getScriptCount();
+        $out = [];
+        for($i=1; $i <= $numScripts; $i++) {
+            $out[] = $this->getTag('Script '.$i);
+        }
+        return $out;
     }
 
     /**
@@ -173,6 +192,7 @@ class AGNTBlock extends TagBlock {
     public function getAgentAnimationFirstImage() {
         return $this->getTag('Animation Sprite First Image');
     }
+
     /**
      * Gets the animation displayed on the C3 creator/DS injector
      *
@@ -181,9 +201,10 @@ class AGNTBlock extends TagBlock {
     public function getAgentAnimationString() {
         return $this->getTag('Agent Animation String');
     }
-    /// @brief Gets the image used on the creator
 
     /**
+     * Gets the image used on the creator
+     *
      * Since I have no desire to bring GIF files back to the internet
      * this function will ONLY support single-frame animations.
      * If you really, REALLY, want to make a GIF, it's totally

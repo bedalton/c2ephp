@@ -2,8 +2,9 @@
 
 namespace C2ePhp\Support;
 
-/// @brief Class to read from strings in the same way as files
 /**
+ * Class to read from strings in the same way as files
+ *
  * This is a convenience class to allow strings to be
  * treated in the same way as files. You won't <i>generally</i>
  * have to create these yourself, but if you want to, go ahead.
