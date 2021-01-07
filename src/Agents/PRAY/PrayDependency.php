@@ -1,6 +1,6 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 include_once dirname(__FILE__) . '/pray_constants.php';
 

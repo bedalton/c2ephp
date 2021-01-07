@@ -2,10 +2,13 @@
 
 namespace C2ePhp\Agents\COB;
 
-/// @brief Defines Author information about the COB
 use C2ePhp\Support\IReader;
 use Exception;
 
+/**
+ * Defines Author information about the COB
+ * @package C2ePhp\Agents\COB
+ */
 class COBAuthorBlock extends COBBlock {
 
     /// @cond INTERNAL_DOCS
@@ -20,9 +23,9 @@ class COBAuthorBlock extends COBBlock {
 
     /// @endcond
 
-    /// @brief Creates a new COBAuthorBlock
-
     /**
+     * Creates a new COBAuthorBlock
+     *
      * @param string $authorName the name of the author of this COB
      * @param string $authorEmail the author's email address
      * @param string $authorURL The author's website address

@@ -4,11 +4,12 @@ namespace C2ePhp\Sprites;
 
 
 
-/// @brief Class for S16 sprite files.
 use C2ePhp\Support\IReader;
 use Exception;
 
 /**
+ * Class for S16 sprite files.
+ *
  * TODO: Currently doesn't support creating S16s.
  */
 class S16File extends SpriteFile {

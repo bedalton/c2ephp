@@ -2,9 +2,18 @@
 /** @noinspection PhpUnused */
 /// @cond INTERNAL_DOCS
 
-/// @brief C2 CAOS flow control (doif, else, loop, etc) dictionary
-class C2CAOSFlowControls {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\C2;
+
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+/**
+ * C2 CAOS flow control (doif, else, loop, etc) dictionary
+ */
+class C2CAOSFlowControls implements HasTokens {
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             'enum',

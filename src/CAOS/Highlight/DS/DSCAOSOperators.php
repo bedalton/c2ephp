@@ -2,9 +2,18 @@
 /** @noinspection PhpUnused */
 /// @cond INTERNAL_DOCS
 
-/// @brief Valid operators for DS CAOS */
-class DSCAOSOperators {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\DS;
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+/**
+ * Valid operators for DS CAOS
+ */
+class DSCAOSOperators  implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             '=',

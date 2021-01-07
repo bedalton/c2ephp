@@ -5,7 +5,11 @@ namespace C2ePhp\Sprites;
 use C2ePhp\Support\IReader;
 use Exception;
 
-/// @brief Class representing a C16 sprite file.
+/**
+ * Class representing a C16 sprite file.
+ *
+ * @package C2ePhp\Sprites
+ */
 class C16File extends SpriteFile {
     /// @cond INTERNAL_DOCS
 

@@ -2,19 +2,19 @@
 
 namespace C2ePhp\Sprites;
 
-
-/// @brief Class for files in C1's SPR format.
 use C2ePhp\Support\IReader;
 use Exception;
 
 /**
- * Creating new SPR files is currently unsupported. \n
+ * Class for files in C1's SPR format.
+ *
+ * Creating new SPR files is currently unsupported.
  * TODO: Allow creating SPR files.
 */
 class SPRFile extends SpriteFile {
 
-    /// @brief Instantiates a new SPRFile
     /**
+     * Instantiates a new SPRFile
      * Reads in the IReader and creates SPRFrames as required.
      * @param IReader $reader An IReader to read from.
      * @throws Exception
@@ -31,7 +31,10 @@ class SPRFile extends SpriteFile {
         }
     }
 
-    /// @brief Compiles the SPR file into a binary string
+    /**
+     * Compiles the SPR file into a binary string
+     * @return false|string
+     */
     public function compile() {
         $data = pack('v', $this->getFrameCount());
         $offset = 2+(8*$this->getFrameCount());

@@ -67,8 +67,10 @@ class COBAgentBlock extends COBBlock {
     private $eventScripts;
     /// @endcond
 
-    /// @brief Initialises a new COBAgentBlock with the given name and description.
-    /** As defaults can be made for everything else these are the only non-optional
+    /**
+     * Initialises a new COBAgentBlock with the given name and description.
+     *
+     * As defaults can be made for everything else these are the only non-optional
      * parts of a COB file in my opinion. Even then they could just be '' if you
      * really felt like it.
      * @param string $agentName The name of the agent (as displayed in the C2 injector)
@@ -351,7 +353,7 @@ class COBAgentBlock extends COBBlock {
     /// @cond INTERNAL_DOCS
 
     /**
-     * @brief Adds a remover script by reading from an RCB file.
+     * Adds a remover script by reading from an RCB file.
      * @param IReader $reader A StringReader or FileReader for the RCB
      * @throws Exception
      */
@@ -435,9 +437,10 @@ class COBAgentBlock extends COBBlock {
         return $agentBlock;
 
     }
-    /// @brief Creates a COBAgentBlock from an IReader
 
     /**
+     * Creates a COBAgentBlock from an IReader
+     *
      * Reads from the current position of the IReader to fill out the data required by
      * the COBAgentBlock, then creates one and adds all the fields to it.
      * @param IReader $reader The IReader, seeked to the beginning of the contents of the agent block

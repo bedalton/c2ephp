@@ -4,10 +4,8 @@ namespace C2ePhp\Support;
 
 use Exception;
 
-require_once(dirname(__FILE__) . '/IReader.php');
-/// @brief Wrapper class to make reading files easier.
-
 /**
+ * Wrapper class to make reading files easier.
  * Quite often you'll have to make a FileReader in order to use other
  * read from a file. \n
  * This is a simple process, simply pass in the filename to FileReader()

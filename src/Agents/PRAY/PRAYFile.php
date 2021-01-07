@@ -1,14 +1,15 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 include_once dirname(__FILE__) . './pray_constants.php';
 
-/// @brief Class representing a file that uses the PRAY format
 use C2ePhp\Support\IReader;
 use Exception;
 
 /**
+ * Class representing a file that uses the PRAY format
+ *
  * .creature, .family and .agents files all use this format.
  */
 class PRAYFile {
@@ -123,9 +124,9 @@ class PRAYFile {
         }
     }
 
-    /// @brief Gets a block with the specified name
-
     /**
+     * Gets a block with the specified name
+     *
      * This is mainly used when you want to get the PHOTBlock
      * for a particular CreatureHistoryEvent, for example.
      * @param string $name
@@ -154,11 +155,11 @@ class PRAYFile {
         }
     }
 
-    /// @brief Reads a block from the reader
-
     /**
+     * Reads a block from the reader
+     *
      * Reads a block, then creates it using the
-     * PrayBlock::MakePrayBlock method. \n
+     * PrayBlock::MakePrayBlock method.
      * @returns true if the block was created successfully,
      * false otherwise.
      * @throws Exception

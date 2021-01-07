@@ -2,7 +2,7 @@
 
 /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 

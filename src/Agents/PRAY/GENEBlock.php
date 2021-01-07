@@ -1,6 +1,6 @@
 <?php
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 
@@ -15,8 +15,9 @@ require_once(dirname(__FILE__) . '/PrayBlock.php');
  */
 class GENEBlock extends PrayBlock {
 
-    /// @brief Creates a new GENEBlock
     /**
+     * Creates a new GENEBlock
+     *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
      * @param PRAYFile $prayFile The PRAYFile object this block belongs to. Can be null.
