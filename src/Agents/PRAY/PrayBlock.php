@@ -25,6 +25,8 @@ abstract class PrayBlock {
     private $type;
     /** @var bool */
     private $decompiled;
+    /** @var string */
+    private $rawContents;
     /** @var int */
     private $flags;
 
@@ -54,6 +56,7 @@ abstract class PrayBlock {
             $this->decompiled = true;
         }
         $this->name = $name;
+        $this->rawContents = $content;
         $this->content = $content;
         $this->flags = $flags;
         $this->type = $type;
@@ -126,6 +129,14 @@ abstract class PrayBlock {
             $this->setFlagsOff(PRAY_FLAG_ZLIB_COMPRESSED);
         }
         return $this->content;
+    }
+
+    /**
+     * Gets the initial content for this pray block
+     * @return string
+     */
+    function getRawContent() {
+        return $this->rawContents;
     }
 
     /**

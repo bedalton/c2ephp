@@ -22,7 +22,7 @@ use Exception;
 abstract class TagBlock extends PrayBlock {
     /// @cond INTERNAL_DOCS
 
-    /** @var mixed */
+    /** @var string[]|int[] */
     private $tags;
 
     /// @brief Creates a new TagBlock
@@ -67,7 +67,7 @@ abstract class TagBlock extends PrayBlock {
      * This is mainly useful for people writing subclasses of TagBlock.
      * If you have to write code that uses GetTags in your application,
      * please file a bug report!
-     * @return mixed[]
+     * @return string[]|int[]
      */
     public function getTags() {
         $this->ensureDecompiled();
@@ -80,7 +80,7 @@ abstract class TagBlock extends PrayBlock {
      * Sets the tag with the given value, overwriting or creating the tag as needed.
      * Generally setters ought to be used in subclasses of TagBlock.
      * @param string $tag Name of the tag to set
-     * @param mixed $value The value to set the tag to
+     * @param string|int $value The value to set the tag to
      */
     public function setTag($tag, $value) {
         $this->ensureDecompiled();

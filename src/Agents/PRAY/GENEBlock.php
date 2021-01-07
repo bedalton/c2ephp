@@ -6,9 +6,10 @@ use Exception;
 
 require_once(dirname(__FILE__) . '/PrayBlock.php');
 
-/// @brief The class for a GENE block
 /**
- * The contents are identical to that of a .gen file\n
+ * The class for a GENE block
+ *
+ * The contents are identical to that of a .gen file
  * This class doesn't have any useful functions yet - I don't
  * actually know how to decode genetics at the moment.
  */
