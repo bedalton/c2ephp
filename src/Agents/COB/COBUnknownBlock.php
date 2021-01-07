@@ -2,10 +2,13 @@
 
 namespace C2ePhp\Agents\COB;
 
-
-/// @brief Simple class to allow for extra block types.
 use Exception;
 
+/**
+ * Simple class to allow for extra block types.
+ *
+ * @package C2ePhp\Agents\COB
+ */
 class COBUnknownBlock extends COBBlock {
 
     /// @cond INTERNAL_DOCS

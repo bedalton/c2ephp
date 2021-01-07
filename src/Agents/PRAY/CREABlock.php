@@ -1,6 +1,6 @@
 <?php
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 
@@ -12,8 +12,10 @@ require_once(dirname(__FILE__) . '/CreaturesArchiveBlock.php');
  * The binary format of this block is completely un-understood.
  */
 class CREABlock extends CreaturesArchiveBlock {
-    /// @brief Instantiate a new CREABlock
+
     /**
+     * Instantiate a new CREABlock
+     *
      * If $prayFile is not null, all the data about this CREABlock
      * will be read from the PRAYFile.
      * @param PRAYFile $prayFile The PRAYFile associated with this CREA block.

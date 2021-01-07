@@ -1,13 +1,17 @@
 <?php /** @noinspection PhpUnused */
 /** @noinspection SpellCheckingInspection */
-
+namespace C2ePhp\CAOS\Highlight\C2;
 /// @cond INTERNAL_DOCS
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
 
 /**
  * C2 CAOS commands dictionary
  */
-class C2CAOSCommands {
-    /// @brief Returns an array of tokens.
+class C2CAOSCommands implements HasTokens {
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             //creation

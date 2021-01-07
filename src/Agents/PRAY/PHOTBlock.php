@@ -1,23 +1,23 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
-/// @brief Representation of a PHOT block
 use C2ePhp\Sprites\S16File;
 use C2ePhp\Support\StringReader;
 use Exception;
 
 /**
-* Used to store photos of creatures.
+ * Used to store photos of creatures.
  *
-* For all properly exported creatures, PHOT blocks always have a
-* corresponding CreatureHistoryEvent in the GLSTBlock. \n
-* Support for creating your own PHOTBlocks is currently nonexistent.
-*/
+ * For all properly exported creatures, PHOT blocks always have a
+ * corresponding CreatureHistoryEvent in the GLSTBlock.
+ * Support for creating your own PHOTBlocks is currently nonexistent.
+ */
 class PHOTBlock extends PrayBlock {
 
-    /// @brief Instantiate a PHOTBlock
     /**
+     * Instantiate a PHOTBlock
+     *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
      * @param PRAYFile $prayFile The PRAYFile that this DSAG block belongs to.

@@ -1,12 +1,13 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
-/// @brief Base block class for working with tag-type blocks
 use C2ePhp\Support\StringReader;
 use Exception;
 
 /**
+ * Base block class for working with tag-type blocks
+ *
  * This includes (but may not be limited to) agents
  * (AGNTBlock,DSAGBlock), creatures (EXPCBlock,DSEXBlock) and starter
  * families (SFAMBlock,DFAMBlock) \n
@@ -25,9 +26,10 @@ abstract class TagBlock extends PrayBlock {
     /** @var string[]|int[] */
     private $tags;
 
-    /// @brief Creates a new TagBlock
-
-    /** This should be called by all subclasses from their constructors.
+    /**
+     * Creates a new TagBlock
+     *
+     * This should be called by all subclasses from their constructors.
      * @param PRAYFile|PrayBlock[] $prayFile The prayFile this block is contained in, or for TagBlocks being created from scratch, the initial tags array. Can be null.
      * @param string $name The name of the block. Cannot be null.
      * @param string $content The binary data this block contains. Can be null.

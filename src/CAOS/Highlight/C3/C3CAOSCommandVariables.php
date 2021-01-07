@@ -2,9 +2,19 @@
 /** @noinspection PhpUnused */
 /// @cond INTERNAL_DOCS
 
-/// @brief C3 CAOS dictionary of tokens that can act like commands or variables
-class C3CAOSCommandVariables {
-    /// @brief Returns an array of tokens.
+namespace C2ePhp\CAOS\Highlight\C3;
+
+use C2ePhp\CAOS\Highlight\TokenSets\HasTokens;
+
+/**
+ * C3 CAOS dictionary of tokens that can act like commands or variables
+ */
+class C3CAOSCommandVariables implements HasTokens {
+
+    /**
+     * Returns an array of tokens.
+     * @return string[]
+     */
     public static function getTokens() {
         return array(
             'attr',

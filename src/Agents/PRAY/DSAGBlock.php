@@ -1,6 +1,6 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 use C2ePhp\Sprites\C16File;
 use C2ePhp\Sprites\S16File;

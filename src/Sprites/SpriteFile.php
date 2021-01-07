@@ -2,9 +2,11 @@
 
 namespace C2ePhp\Sprites;
 
-/// @brief Superclass for all SpriteFile types
 use Exception;
 
+/**
+ * Superclass for all SpriteFile types
+ */
 abstract class SpriteFile {
 
     /// @cond INTERNAL_DOCS
@@ -72,10 +74,9 @@ abstract class SpriteFile {
             $this->frames[] = $frame->toSpriteFrame($this->spriteFiletype);
         }
     }
-    /// @brief Replaces a frame in the SpriteFile
-
     /**
      * Replaces the frame in the given position
+     *
      * Uses the same magic as AddFrame
      * @param SpriteFrame $frame A SpriteFrame of any type.
      * @param int $position Which frame to replace. If negative, counts
@@ -88,25 +89,28 @@ abstract class SpriteFile {
         }
         $this->frames[$position] = $frame->toSpriteFrame($this->spriteFiletype);
     }
-    /// @brief Gets the number of frames currently stored in this SpriteFile.
 
     /**
+     * Gets the number of frames currently stored in this SpriteFile.
+     *
      * @return int The number of frames
      */
     public function getFrameCount() {
         return sizeof($this->frames);
     }
-    /// @brief Deletes the frame in the given position.
 
     /**
+     * Deletes the frame in the given position.
+     *
      * @param int $frame The 0-based index of the frame to delete.
      */
     public function deleteFrame($frame) {
         unset($this->frames[$frame]);
     }
-    /// @brief Converts the given frame to PNG. <strong>Deprecated.</strong>
 
     /**
+     * Converts the given frame to PNG. <strong>Deprecated.</strong>
+     *
      * May be removed in a future release.
      * Use GetFrame($frame)->toPNG() instead.
      * @param int $frame The 0-based index of the frame to delete.

@@ -38,8 +38,9 @@ class CreatureHistory {
 
     /// @endcond
 
-    /// @brief Construct a CreatureHistory object.
     /**
+     * Construct a CreatureHistory object.
+     *
      * @param false|string $moniker The moniker of the creature
      * @param false|string $name The creature's name
      * @param int $gender The creature's gender
@@ -54,8 +55,9 @@ class CreatureHistory {
         $this->species = $species;
     }
 
-    /// @brief Compiles the CreatureHistory into CreaturesArchive data.
     /**
+     * Compiles the CreatureHistory into CreaturesArchive data.
+     *
      * @param int $format GLST_FORMAT_C3 or GLST_FORMAT_DS.
      * @return string binary string ready for archiving and putting in a GLST block.
      */
@@ -86,8 +88,9 @@ class CreatureHistory {
         return $data;
     }
 
-    /// @brief Try to work out which game this CreatureHistory is for
     /**
+     * Try to work out which game this CreatureHistory is for
+     *
      * This is done by working out whether any DS-specific variables
      * are set.
      * @return int or GLST_FORMAT_C3.
@@ -96,8 +99,9 @@ class CreatureHistory {
         return (isset($this->unknown1)) ? GLST_FORMAT_DS : GLST_FORMAT_C3;
     }
 
-    /// @brief Adds an event to the end of a history.
     /**
+     * Adds an event to the end of a history
+     *
      * @param CreatureHistoryEvent $event A CreatureHistoryEvent to add to this
      * CreatureHistory object.
      */
@@ -105,8 +109,9 @@ class CreatureHistory {
         $this->events[] = $event;
     }
 
-    /// @brief Gets an event from the history
     /**
+     * Gets an event from the history
+     *
      * Simply gets the nth event that happened in this history
      * @param int $n the event number to get
      * @return CreatureHistoryEvent $nth CreatureHistoryEvent
@@ -115,8 +120,9 @@ class CreatureHistory {
         return $this->events[$n];
     }
 
-    /// @brief Removes an event from history
     /**
+     * Removes an event from history
+     *
      * Removes the nth event from this history
      * @param int $n the event number to remove
      */
@@ -124,16 +130,18 @@ class CreatureHistory {
         unset($this->events[$n]);
     }
 
-    /// @brief Counts the events in the history
     /**
+     * Counts the events in the history
+     *
      * @return int How many events there currently are in this history
      */
     public function countEvents() {
         return sizeof($this->events);
     }
 
-    /// @brief Gets all events matching the given event type
     /**
+     * Gets all events matching the given event type
+     *
      * @see agents/CreatureHistory/CreatureHistoryEvent.php Event Types
      * @param int $type one of the Event Type constants.
      * @return CreatureHistoryEvent[] an array of CreatureHistoryEvents.
@@ -148,21 +156,27 @@ class CreatureHistory {
         return $matchingEvents;
     }
 
-    /// Gets all the events in this history
     /**
+     * Gets all the events in this history
+     *
      * @return CreatureHistoryEvent[] array of CreatureHistoryEvents
      */
     public function getEvents() {
         return $this->events;
     }
 
-    /// @brief Gets the moniker of the creature this history is attached to.
+    /**
+     * Gets the moniker of the creature this history is attached to.
+     *
+     * @return false|string
+     */
     public function getCreatureMoniker() {
         return $this->moniker;
     }
 
-    /// @brief Gets the generation of the creature
     /**
+     * Gets the generation of the creature
+     *
      * I cannot guarantee that this function works. However, it does use the
      * same method as the Creatures 3 in-game creature information viewer,
      * so it should work on all creatures made in-game.
@@ -247,9 +261,9 @@ class CreatureHistory {
     }
 
 
-    /// @brief Set variables that are currently unknown, specific to
-    /// DS
     /**
+     * Set variables that are currently unknown, specific to DS
+     *
      * This calls SetC3Unknown
      * @param int $unknown1 First unknown variable
      * @param false|string $unknown2 Second unknown variable
@@ -259,8 +273,9 @@ class CreatureHistory {
         $this->unknown2 = $unknown2;
     }
 
-    /// @brief Sets whether or not the creature is a veteran of the warp (DS only)
     /**
+     * Sets whether or not the creature is a veteran of the warp (DS only)
+     *
      * @param int $warpVeteran A boolean (I think!)
      */
     public function setWarpVeteran($warpVeteran) {

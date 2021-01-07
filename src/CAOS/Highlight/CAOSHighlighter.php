@@ -1,5 +1,22 @@
 <?php /** @noinspection SpellCheckingInspection */
 /** @noinspection PhpUnused */
+namespace C2ePhp\CAOS\Highlight;
+use C2ePhp\CAOS\Highlight\C2\C2CAOSCommands;
+use C2ePhp\CAOS\Highlight\C2\C2CAOSCommandVariables;
+use C2ePhp\CAOS\Highlight\C2\C2CAOSFlowControls;
+use C2ePhp\CAOS\Highlight\C2\C2CAOSOperators;
+use C2ePhp\CAOS\Highlight\C2\C2CAOSVariables;
+use C2ePhp\CAOS\Highlight\C3\C3CAOSCommands;
+use C2ePhp\CAOS\Highlight\C3\C3CAOSCommandVariables;
+use C2ePhp\CAOS\Highlight\C3\C3CAOSFlowControls;
+use C2ePhp\CAOS\Highlight\C3\C3CAOSOperators;
+use C2ePhp\CAOS\Highlight\C3\C3CAOSVariables;
+use C2ePhp\CAOS\Highlight\DS\DSCAOSCommands;
+use C2ePhp\CAOS\Highlight\DS\DSCAOSCommandVariables;
+use C2ePhp\CAOS\Highlight\DS\DSCAOSFlowControls;
+use C2ePhp\CAOS\Highlight\DS\DSCAOSOperators;
+use C2ePhp\CAOS\Highlight\DS\DSCAOSVariables;
+use Exception;
 
 define('FORMAT_C1', 'C1');
 define('FORMAT_C2', 'C2');
@@ -7,9 +24,9 @@ define('FORMAT_C3', 'C3');
 define('FORMAT_DS', 'DS');
 
 
-/// @brief Class for highlighting CAOS
-
 /**
+ * Class for highlighting CAOS
+ *
  * This is the class used for highlighting CAOS code. \n
  * It outputs HTML code, using spans with classes. \n
  * It current supports C2, C3 and DS CAOS. \n
@@ -54,23 +71,36 @@ class CAOSHighlighter {
      * This function also loads CAOS definitions from the sub-folders of this folder.
      * In this way it is extensible.
      * @param string $format The format of the CAOS you intend to highlight.
-     * @noinspection PhpIncludeInspection
+     * @throws Exception
      */
     public function __construct($format) {
         $this->scriptFormat = $format;
-        //load files...
-        require_once(dirname(__FILE__) . '/' . $format . '/CommandVariables.php');
-        require_once(dirname(__FILE__) . '/' . $format . '/Commands.php');
-        require_once(dirname(__FILE__) . '/' . $format . '/Variables.php');
-        require_once(dirname(__FILE__) . '/' . $format . '/FlowControls.php');
-        require_once(dirname(__FILE__) . '/' . $format . '/Operators.php');
+        switch($format) {
+            case 'C2':
+                $this->caosCommandVariables = C2CAOSCommandVariables::getTokens();
+                $this->caosCommands = C2CAOSCommands::getTokens();
+                $this->caosVariables = C2CAOSVariables::getTokens();
+                $this->caosOperators = C2CAOSOperators::getTokens();
+                $this->caosFlowControls = C2CAOSFlowControls::getTokens();
+                break;
+            case 'C3':
+                $this->caosCommandVariables = C3CAOSCommandVariables::getTokens();
+                $this->caosCommands = C3CAOSCommands::getTokens();
+                $this->caosVariables = C3CAOSVariables::getTokens();
+                $this->caosOperators = C3CAOSOperators::getTokens();
+                $this->caosFlowControls = C3CAOSFlowControls::getTokens();
+                break;
+            case 'DS':
+                $this->caosCommandVariables = DSCAOSCommandVariables::getTokens();
+                $this->caosCommands = DSCAOSCommands::getTokens();
+                $this->caosVariables = DSCAOSVariables::getTokens();
+                $this->caosOperators = DSCAOSOperators::getTokens();
+                $this->caosFlowControls = DSCAOSFlowControls::getTokens();
+                break;
+            default:
+                throw new Exception("Caos variant: $format is not supported");
 
-        //put into arrays
-        $this->caosCommandVariables = call_user_func(array($format . 'CAOSCommandVariables', 'GetTokens'));
-        $this->caosCommands = call_user_func(array($format . 'CAOSCommands', 'GetTokens'));
-        $this->caosVariables = call_user_func(array($format . 'CAOSVariables', 'GetTokens'));
-        $this->caosOperators = call_user_func(array($format . 'CAOSOperators', 'GetTokens'));
-        $this->caosFlowControls = call_user_func(array($format . 'CAOSFlowControls', 'GetTokens'));
+        }
     }
 
     /**
@@ -141,8 +171,9 @@ class CAOSHighlighter {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief Creates an array of subroutine names
     /**
+     * Creates an array of subroutine names
+     *
      * Collects all the tokens coming after SUBRs and places them in
      * an array.
      */
@@ -160,8 +191,9 @@ class CAOSHighlighter {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief The meat of the class - essentially a main loop.
     /**
+     * The meat of the class - essentially a main loop.
+     *
      * This function performs all the necessary wizardry to get the
      * CAOS highlighted and contains a lot of strange logic.
      */

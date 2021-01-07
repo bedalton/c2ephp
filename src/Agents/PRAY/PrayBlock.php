@@ -1,6 +1,6 @@
 <?php /** @noinspection PhpUnused */
 
-namespace C2ePhp\PRAY;
+namespace C2ePhp\Agents\PRAY;
 
 
 use Exception;
@@ -10,7 +10,7 @@ include_once dirname(__FILE__) . './pray_constants.php';
 /**
  * Abstract class to represent PRAY blocks
  *
- * @package C2ePhp\PRAY
+ * @package C2ePhp\Agents\PRAY
  */
 abstract class PrayBlock {
     /// @cond INTERNAL_DOCS
@@ -263,8 +263,9 @@ abstract class PrayBlock {
 
     /// @cond INTERNAL_DOCS
 
-    /// @brief Compiles the block data
     /**
+     * Compiles the block data
+     *
      * return The compiled block data as a string.
      */
     protected abstract function compileBlockData();

@@ -6,8 +6,11 @@ use C2ePhp\Support\IReader;
 use Exception;
 
 
-/// @brief Class for frames of S16 files.
-/** S16Frames can be created from S16Files or from GD Image resources. */
+/**
+ * Class for frames of S16 files.
+ *
+ * S16Frames can be created from S16Files or from GD Image resources.
+ */
 class S16Frame extends SpriteFrame {
 
     /// @cond INTERNAL_DOCS
@@ -19,8 +22,15 @@ class S16Frame extends SpriteFrame {
 
     /// @endcond
 
-    /// @brief Instantiate an S16Frame
-
+    /**
+     * Instantiate an S16Frame
+     * @param $reader
+     * @param string $encoding
+     * @param false $width
+     * @param false $height
+     * @param false $offset
+     * @throws Exception
+     */
     public function __construct($reader, $encoding = '565', $width = false, $height = false, $offset = false)
     {
         if ($reader instanceof IReader) {
