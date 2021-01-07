@@ -8,7 +8,8 @@ use C2ePhp\Support\StringReader;
 use Exception;
 
 /**
-* Used to store photos of creatures. \n
+* Used to store photos of creatures.
+ *
 * For all properly exported creatures, PHOT blocks always have a
 * corresponding CreatureHistoryEvent in the GLSTBlock. \n
 * Support for creating your own PHOTBlocks is currently nonexistent.
