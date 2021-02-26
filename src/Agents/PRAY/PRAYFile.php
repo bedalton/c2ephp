@@ -2,7 +2,7 @@
 
 namespace C2ePhp\Agents\PRAY;
 
-include_once dirname(__FILE__) . './pray_constants.php';
+include_once dirname(__FILE__) . '/pray_constants.php';
 
 use C2ePhp\Support\IReader;
 use Exception;

@@ -5,7 +5,7 @@ namespace C2ePhp\Agents\PRAY;
 
 use Exception;
 
-include_once dirname(__FILE__) . './pray_constants.php';
+include_once dirname(__FILE__) . '/pray_constants.php';
 
 /**
  * Abstract class to represent PRAY blocks
