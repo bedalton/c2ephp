@@ -1,6 +1,7 @@
 <?php
-include('../agents/COB.php');
-require_once('../support/FileReader.php');
+
+use C2ePhp\Agents\COB\COB;
+use C2ePhp\Support\FileReader;
 
 $cob = new COB(new FileReader($argv[1]));
 
@@ -11,5 +12,3 @@ foreach($blocks as $block) {
   fwrite($fh,$block->GetContents());
   fclose($fh);
 }
-
-?>

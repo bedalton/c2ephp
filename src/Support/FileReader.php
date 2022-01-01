@@ -12,10 +12,13 @@ use Exception;
  */
 class FileReader implements IReader {
 
+	const CP_DECODING_DEFAULT = FALSE;
     /// @cond INTERNAL_DOCS
 
     /** @var resource file handle */
     private $handle;
+
+    private $size;
 
     /// @endcond
 
@@ -24,9 +27,9 @@ class FileReader implements IReader {
      * @param string $filename A full path to the file you want to open.
      * @throws Exception
      */
-    public function __construct($filename) {
+    public function __construct(string $filename) {
         if (!file_exists($filename)) {
-            throw new Exception('File does not exist: ' . $filename);
+            throw new Exception("File does not exist: $filename");
         }
         if (!is_file($filename)) {
             throw new Exception('Target is not a file.');
@@ -34,20 +37,31 @@ class FileReader implements IReader {
         if (!is_readable($filename)) {
             throw new Exception('File exists, but is not readable.');
         }
-
+        $this->size = filesize($filename);
         $this->handle = fopen($filename, 'rb');
     }
 
-    /**
-     * Reads a specific number of bytes, returning as string
-     * @param int $length
-     * @return string
-     */
-    public function read($length) {
-        if ($length > 0) {
-            return fread($this->handle, $length);
+	/**
+	 * Reads a specific number of bytes, returning as string
+	 * @param int $length
+	 * @param bool $cpDecode decode CP-1252 text to UTF-8
+	 * @param bool $throwing throw exception on not-enough-bytes
+	 * @return string
+	 * @throws Exception
+	 */
+    public function read(int $length, bool $cpDecode = self::CP_DECODING_DEFAULT, bool $throwing = TRUE) {
+        if ($this->getPosition() + $length > $this->size) {
+            if ($throwing) {
+                $bytesPast = ($this->size - $this->getPosition());
+                throw new Exception("Cannot read past end of file. Expected: $length bytes. Found: $bytesPast");
+            }
+            return NULL;
         }
-        return '';
+		$str = $length ? fread($this->handle, $length) : '';
+		if ($str && $cpDecode) {
+			$str = __ef_decode_reader($str);
+		}
+        return $str;
     }
 
     /**
@@ -55,13 +69,16 @@ class FileReader implements IReader {
      * @return int
      * @throws Exception
      */
-    public function readInt($length) {
+    public function readInt(int $length) {
         $int = 0;
+        if (($this->getPosition() + $length) > $this->size) {
+            throw new Exception("Cannot read int($length) past end of buffer");
+        }
         for ($x = 0; $x < $length; $x++) {
-            $buffer = (ord(fgetc($this->handle)) << ($x * 8));
-            if ($buffer === false) {
-                throw new Exception('Read failure');
-            }
+            $buffer = fgetc($this->handle);
+            if ($buffer === FALSE)
+                throw new Exception("Cannot read int($length); Read failure");
+            $buffer = (ord($buffer) << ($x * 8));
             $int += $buffer;
         }
         return $int;
@@ -76,33 +93,38 @@ class FileReader implements IReader {
     }
 
     /**
+     * Check if there is more data at current position in buffer
+     * @return bool <b>true</b> if there is more data to read at current buffer position
+     */
+    public function hasNext() {
+        return $this->getPosition() < $this->size;
+    }
+
+    /**
      * Reads a section of the file stream from a given point
      * @param int $start
      * @param int|false $length
      * @return false|string
+     * @throws Exception
      */
-    public function getSubString($start, $length = FALSE) {
+    public function getSubString(int $start, $length = FALSE) {
         $oldPosition = ftell($this->handle);
         fseek($this->handle, $start);
-        $data = '';
         if ($length === false) {
-            while ($newData = $this->read(4096)) {
-                if (strlen($newData) == 0) {
-                    break;
-                }
-                $data .= $newData;
-            }
-        } else {
-            $data = fread($this->handle, $length);
+            $length = $this->size - $start;
         }
+        $data = fread($this->handle, $length);
         fseek($this->handle, $oldPosition);
         return $data;
     }
 
+    /**
+     * @throws Exception
+     */
     public function readCString() {
         $string = '';
-        while (($char = $this->read(1)) !== false) {
-            if (ord($char) == 0) {
+        while (!is_null($char = $this->read(1, self::CP_DECODING_DEFAULT, FALSE))) {
+            if (ord($char) === 0) {
                 break;
             }
             $string .= $char;
@@ -110,12 +132,30 @@ class FileReader implements IReader {
         return $string;
     }
 
-    public function seek($position) {
+    /**
+     * Changes the current position in the reader's stream
+     *
+     * This is analogous to fseek in C or PHP.
+     * @param int $position
+     * @return void
+     */
+    public function seek(int $position) {
         fseek($this->handle, $position);
     }
 
+    /**
+     * Advances the position of the reader by $count.
+     *
+     * @param $count
+     * @return void
+     */
     public function skip($count) {
         fseek($this->handle, $count, SEEK_CUR);
+    }
+
+    public function close() {
+        if (is_resource($this->handle))
+            fclose($this->handle);
     }
 }
 

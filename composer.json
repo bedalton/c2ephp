@@ -3,6 +3,7 @@
     "description": "Suite of utilities for parsing Creatures game files",
     "type": "library",
     "license": "MIT",
+    "version": "1.0",
     "minimum-stability": "dev",
     "require": {},
     "autoload": {

@@ -54,7 +54,7 @@ class S16File extends SpriteFile {
      * format or vise versa.
      * @param string $encoding '555', '565'
      */
-    public function setEncoding($encoding) {
+    public function setEncoding(string $encoding) {
         $this->encoding = $encoding;
     }
 

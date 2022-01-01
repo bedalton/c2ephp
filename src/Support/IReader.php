@@ -18,15 +18,17 @@ interface IReader {
      *
      * @param int $length Length of the int in bytes.
      */
-    public function readInt($length);
+    public function readInt(int $length);
 
     /**
      * Reads a string
      *
      * @param int $length Length of the string to read in bytes
+	 * @param bool $cpDecode Decode CP1252 string to UTF-8
+	 * @param bool $throwing throw exception on not-enough-bytes
      * @return string|false
      */
-    public function read($length);
+    public function read(int $length, bool $cpDecode = TRUE, bool $throwing = TRUE);
 
     /**
      * Gets a substring
@@ -41,7 +43,7 @@ interface IReader {
      * @param bool|int $length
      * @return string
      */
-    public function getSubString($start, $length = FALSE);
+    public function getSubString(int $start, $length = FALSE);
 
     /**
      * Gets the position of the cursor
@@ -52,21 +54,27 @@ interface IReader {
     public function getPosition();
 
     /**
+     * Check if there is more data at current position in buffer
+     * @return bool <b>true</b> if there is more data to read at current buffer position
+     */
+    public function hasNext();
+
+    /**
      * Changes the current position in the reader's stream
      *
      * This is analogous to fseek in C or PHP.
      * @param int $position
      * @return void
      */
-    public function seek($position);
+    public function seek(int $position);
 
     /**
      * Advances the position of the reader by $count.
      *
-     * @param $count
+     * @param int $count
      * @return void
      */
-    public function skip($count);
+    public function skip(int $count);
 
     /**
      * Reads a c-style string at the current position.

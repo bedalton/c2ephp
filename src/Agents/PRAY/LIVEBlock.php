@@ -19,14 +19,13 @@ class LIVEBlock extends AGNTBlock {
      *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
-     * @param PRAYFile $prayFile The PRAYFile this LIVEBlock belongs to.
+     * @param PRAYFile|null $prayFile The PRAYFile this LIVEBlock belongs to.
      * @param string $name The name of this block
      * @param string $content The binary data of this file block.
      * @param int $flags The block's flags. See PrayBlock.
      * @throws Exception
      */
-    public function __construct($prayFile, $name, $content, $flags) {
+    public function __construct(?PRAYFile $prayFile, string $name, string $content, int $flags) {
         parent::__construct($prayFile, $name, $content, $flags, PRAY_BLOCK_LIVE);
-
     }
 }

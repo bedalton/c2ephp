@@ -4,8 +4,13 @@ namespace C2ePhp\Agents\PRAY;
 
 use C2ePhp\CreatureHistory\CreatureHistory;
 use C2ePhp\CreatureHistory\CreatureHistoryEvent;
+use C2ePhp\Support\IReader;
 use C2ePhp\Support\StringReader;
 use Exception;
+
+require_once(dirname(__FILE__) . '/../CreatureHistory/constants.php');
+require_once(dirname(__FILE__) . '/../CreatureHistory/CreatureHistory.php');
+require_once(dirname(__FILE__) . '/../CreatureHistory/CreatureHistoryEvent.php');
 
 /**
  * PRAY Block for Creature History Data.
@@ -16,7 +21,9 @@ class GLSTBlock extends CreaturesArchiveBlock {
 
     /// @cond INTERNAL_DOCS
 
+	/** @var CreatureHistory  */
     private $history;
+	/** @var int  */
     private $format = GLST_FORMAT_UNKNOWN;
 
     /// @endcond
@@ -26,7 +33,7 @@ class GLSTBlock extends CreaturesArchiveBlock {
      *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
-     * @param PRAYFile $object The PRAYFile this FILEBlock belongs to, or the
+     * @param PRAYFile|CreatureHistory $object The PRAYFile this FILEBlock belongs to, or the
      * CreatureHistory object to store. <b>Cannot</b> be null.
      * @param string $name The name of this block. I think it's usually the
      * creature's moniker with .GLST appended.
@@ -34,14 +41,12 @@ class GLSTBlock extends CreaturesArchiveBlock {
      * @param int $flags The block's flags. See PrayBlock.
      * @throws Exception
      */
-    public function __construct($object, $name, $content, $flags) {
-        parent::__construct($object, $name, $content, $flags, PRAY_BLOCK_GLST);
-        if (!($object instanceof PRAYFile)) {
-            if ($object instanceof CreatureHistory) {
-                $this->history = $object;
-            } else if (!($object instanceof PRAYFile)) {
-                throw new Exception('Couldn\'t create a GLST block. :(');
-            }
+    public function __construct($object, string $name, string $content, int $flags) {
+		parent::__construct($object instanceof PRAYFile ? $object : NULL, $name, $content, $flags, PRAY_BLOCK_GLST);
+        if ($object instanceof CreatureHistory) {
+            $this->history = $object;
+        } else if (!($object instanceof PRAYFile)) {
+            throw new Exception('Couldn\'t create a GLST block. :(');
         }
     }
 
@@ -97,14 +102,14 @@ class GLSTBlock extends CreaturesArchiveBlock {
      * @return string|null
      */
     public function getPhotoBlockName(CreatureHistoryEvent $event) {
-        $photoName = $event->getPhotoGraph();
+        $photoName = $event->getPhotograph();
         if (empty($photoName)) {
             return null;
         }
         if ($this->format == GLST_FORMAT_DS) {
-            return $photoName.'.DSEX.photo';
+            return $photoName . '.DSEX.photo';
         } else {
-            return $photoName.'.photo';
+            return $photoName . '.photo';
         }
     }
 
@@ -120,9 +125,9 @@ class GLSTBlock extends CreaturesArchiveBlock {
      */
     public function getPhotoBlock(CreatureHistoryEvent $event) {
         if ($this->getPrayFile() instanceof PRAYFile) {
-            return $block = $this->getPrayFile()->getBlockByName($this->getPhotoBlockName($event));
+            return $this->getPrayFile()->getBlockByName($this->getPhotoBlockName($event));
         } else {
-            throw new Exception("This GLSTBlock is not connected to a PRAYFile.");
+            throw new Exception('This GLSTBlock is not connected to a PRAYFile.');
         }
     }
 
@@ -152,13 +157,13 @@ class GLSTBlock extends CreaturesArchiveBlock {
         if ($reader->readInt(4) != 1) { //Always 1, don't know why.
             throw new Exception('Either the GLST Block is corrupt or I don\'t understand what the 2nd set of 4 bytes mean.');
         }
-        $moniker        = $reader->read($reader->readInt(4));
+        $moniker = $reader->read($reader->readInt(4));
         $reader->skip($reader->readInt(4)); //second moniker is always identical and never necessary.
-        $name           = $reader->read($reader->readInt(4));
-        $gender         = $reader->readInt(4);
-        $genus          = $reader->readInt(4); //0 for norn, 1 for grendel, 2 for ettin
-        $species        = $reader->readInt(4);
-        $eventsLength   = $reader->readInt(4);
+        $name = $reader->read($reader->readInt(4));
+        $gender = $reader->readInt(4);
+        $genus = $reader->readInt(4); //0 for norn, 1 for grendel, 2 for ettin
+        $species = $reader->readInt(4);
+        $eventsLength = $reader->readInt(4);
 
         $this->history = new CreatureHistory($moniker, $name, $gender, $genus, $species);
         if (!isset($eventsLength)) {
@@ -188,23 +193,23 @@ class GLSTBlock extends CreaturesArchiveBlock {
     /**
      * Decodes an event. Used by DecompileBlockData.
      *
-     * @param StringReader $reader
+     * @param IReader $reader
      * @return bool
      */
-    private function decodeEvent($reader) {
+    private function decodeEvent(IReader $reader) {
         $eventNumber = $reader->readInt(4);
         //echo 'Event '.$eventNumber."\n";
         if ($eventNumber < 18) {
-            $worldTime      = $reader->readInt(4);
-            $creatureAge    = $reader->readInt(4);
-            $timestamp      = $reader->readInt(4);
-            $lifeStage      = $reader->readInt(4);
-            $moniker        = $reader->read($reader->readInt(4));
-            $moniker2       = $reader->read($reader->readInt(4));
-            $userText       = $reader->read($reader->readInt(4));
-            $photograph     = $reader->read($reader->readInt(4));
-            $worldName      = $reader->read($reader->readInt(4));
-            $worldUID       = $reader->read($reader->readInt(4));
+            $worldTime = $reader->readInt(4);
+            $creatureAge = $reader->readInt(4);
+            $timestamp = $reader->readInt(4);
+            $lifeStage = $reader->readInt(4);
+            $moniker = $reader->read($reader->readInt(4));
+            $moniker2 = $reader->read($reader->readInt(4));
+            $userText = $reader->read($reader->readInt(4));
+            $photograph = $reader->read($reader->readInt(4));
+            $worldName = $reader->read($reader->readInt(4));
+            $worldUID = $reader->read($reader->readInt(4));
             $event = new CreatureHistoryEvent(
                 $eventNumber,
                 $worldTime,
@@ -219,9 +224,9 @@ class GLSTBlock extends CreaturesArchiveBlock {
                 $worldUID
             );
             if ($this->format == GLST_FORMAT_DS) {
-                $DSUser     = $reader->read($reader->readInt(4));
-                $unknown1   = $reader->readInt(4);
-                $unknown2   = $reader->readInt(4);
+                $DSUser = $reader->read($reader->readInt(4));
+                $unknown1 = $reader->readInt(4);
+                $unknown2 = $reader->readInt(4);
                 $event->addDSInfo($DSUser, $unknown1, $unknown2);
             }
             $this->history->addEvent($event);
@@ -236,12 +241,12 @@ class GLSTBlock extends CreaturesArchiveBlock {
      * @param int $format One of the GLST_FORMAT_* constants
      * @return false|string compiled block data for Compile()
      */
-    protected function compileBlockData($format = GLST_FORMAT_UNKNOWN) {
+    protected function compileBlockData(int $format = GLST_FORMAT_UNKNOWN) {
         //if you don't know
         if ($format == GLST_FORMAT_UNKNOWN) {
             $format = $this->guessFormat();
         }
-        return Archive($this->history->compile($format));
+        return archive($this->history->compile($format));
     }
 
     /// @endcond

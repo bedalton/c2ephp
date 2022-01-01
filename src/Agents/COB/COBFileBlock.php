@@ -33,8 +33,8 @@ class COBFileBlock extends COBBlock {
      * @param string $contents The contents of the file
      * @throws Exception
      */
-    public function __construct($type, $name, $contents) {
-        parent::__construct(COB_BLOCK_FILE);
+    public function __construct(string $type, string $name, string $bytes, string $contents) {
+        parent::__construct(COB_BLOCK_FILE, $bytes);
         $this->fileType = $type;
         $this->fileName = $name;
         $this->contents = $contents;
@@ -42,9 +42,9 @@ class COBFileBlock extends COBBlock {
 
     /**
      * Add the reserved data associated with this file block
-     * @param int[] $reserved The reserved data
+     * @param int|null $reserved The reserved data
      */
-    public function addReserved($reserved) {
+    public function addReserved(?int $reserved) {
         $this->reserved = $reserved;
     }
 
@@ -110,7 +110,7 @@ class COBFileBlock extends COBBlock {
         $size = $reader->readInt(4);
         $fileName = $reader->readCString();
         $contents = $reader->read($size);
-        $block = new COBFileBlock($type, $fileName, $contents);
+        $block = new COBFileBlock($type, $fileName, $reader->getSubString(0), $contents);
         $block->addReserved($reserved);
         return $block;
     }

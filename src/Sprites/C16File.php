@@ -35,7 +35,7 @@ class C16File extends SpriteFile {
             if (($buffer & 2) == 0) { //buffer & 2 == 2 => RLE. buffer & 2 == 0 => non-RLE (same as s16 but not supported here because it's complex dude.
                 throw new Exception('This file is probably a S16 masquerading as a C16!');
             } else if ($buffer > 3) {
-                throw new Exception('File encoding not recognised. (' . $buffer . ')');
+                throw new Exception("File encoding not recognised. ($buffer)");
             }
 
             $buffer = $reader->readInt(2);

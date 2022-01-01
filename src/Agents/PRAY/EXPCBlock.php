@@ -39,14 +39,14 @@ class EXPCBlock extends TagBlock {
      *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
-     * @param PRAYFile $prayFile The PRAYFile that this DFAM block belongs to.
+     * @param PRAYFile|null $prayFile The PRAYFile that this DFAM block belongs to.
      * @param string $name The block's name.
      * @param string $content The binary data of this block. May be null.
      * @param int $flags The block's flags
      * @param string $blockType
      * @throws Exception
      */
-    public function __construct($prayFile, $name, $content, $flags, $blockType = PRAY_BLOCK_EXPC) {
+    public function __construct(?PRAYFile $prayFile, string $name, string $content, int $flags, string $blockType = PRAY_BLOCK_EXPC) {
         parent::__construct($prayFile, $name, $content, $flags, $blockType);
     }
 

@@ -18,7 +18,7 @@ class CREABlock extends CreaturesArchiveBlock {
      *
      * If $prayFile is not null, all the data about this CREABlock
      * will be read from the PRAYFile.
-     * @param PRAYFile $prayFile The PRAYFile associated with this CREA block.
+     * @param PRAYFile|null $prayFile The PRAYFile associated with this CREA block.
      * It is allowed to be null.
      * @param string $name The name of this block.
      * @param string $content
@@ -26,7 +26,7 @@ class CREABlock extends CreaturesArchiveBlock {
      * @throws Exception
      * @params string $content This block's content.
      */
-    public function __construct($prayFile, $name, $content, $flags) {
+    public function __construct(?PRAYFile $prayFile, string $name, string $content, int $flags) {
         parent::__construct($prayFile, $name, $content, $flags, PRAY_BLOCK_CREA);
     }
     /// @cond INTERNAL_DOCS

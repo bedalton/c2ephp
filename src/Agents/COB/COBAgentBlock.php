@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnused */
+<?php /** @noinspection SpellCheckingInspection */
+
+/** @noinspection PhpUnused */
 
 namespace C2ePhp\Agents\COB;
 
@@ -33,7 +35,7 @@ class COBAgentBlock extends COBBlock {
     /** @var string */
     private $agentName;
 
-    /** @var string  */
+    /** @var string */
     private $agentDescription;
 
     /** @var int unix timestamp */
@@ -45,12 +47,15 @@ class COBAgentBlock extends COBBlock {
     /** @var int */
     private $quantityAvailable;
 
-    /** @var int unix timestamp*/
+    /** @var int unix timestamp */
     private $expiryDate;
 
     //'reserved' - never officially used by CL
+	/** @var int */
     private $reserved1;
+	/** @var int */
     private $reserved2;
+	/** @var int */
     private $reserved3;
 
     /** @var COBDependency[] */
@@ -64,7 +69,8 @@ class COBAgentBlock extends COBBlock {
     /** @var string */
     private $removeScript;
     /** @var string[] */
-    private $eventScripts;
+    private $eventScripts = [];
+
     /// @endcond
 
     /**
@@ -77,8 +83,8 @@ class COBAgentBlock extends COBBlock {
      * @param string $agentDescription The description of the agent (as displayed in the C2 injector)
      * @throws Exception
      */
-    public function __construct($agentName, $agentDescription) {
-        parent::__construct(COB_BLOCK_AGENT);
+    public function __construct(string $agentName, string $agentDescription, string $bytes) {
+        parent::__construct(COB_BLOCK_AGENT, $bytes);
         $this->agentName = $agentName;
         $this->agentDescription = $agentDescription;
     }
@@ -88,33 +94,34 @@ class COBAgentBlock extends COBBlock {
      *
      * @return string
      * @throws Exception
-     */
+	 */
     public function compile() {
         // TODO: implement
-        throw new Exception("COBAgentBlock::Compile not implemented");
+        throw new Exception('COBAgentBlock::Compile not implemented');
     }
 
     /**
      * Gets the agent's name
-     * @return string
+     * @return string|null
      */
     public function getAgentName() {
-        return $this->agentName;
-    }
-    /**
-     * Gets the agent's description
-     *
-     * @return string
-     */
-    public function getAgentDescription() {
-        return $this->agentDescription;
+        return $this->agentName ?? NULL;
     }
 
     /**
-     * @return int
+     * Gets the agent's description
+     *
+     * @return string|null
+     */
+    public function getAgentDescription() {
+        return $this->agentDescription ?? NULL;
+    }
+
+    /**
+     * @return int|null
      */
     public function getReuseInterval() {
-        return $this->reuseInterval;
+        return $this->reuseInterval ?? NULL;
     }
 
     /**
@@ -126,26 +133,26 @@ class COBAgentBlock extends COBBlock {
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getLastUsageDate() {
-        return $this->lastUsageDate;
+        return $this->lastUsageDate ?? NULL;
     }
 
     /**
      * Gets the expiry date
-     * @return int
+     * @return int|null
      */
     public function getExpiryDate() {
-        return $this->expiryDate;
+        return $this->expiryDate ?? NULL;
     }
 
     /**
      * Gets the agent's install script
-     * @return string
+     * @return string|null
      */
     public function getInstallScript() {
-        return $this->installScript;
+        return $this->installScript ?? NULL;
     }
 
     /**
@@ -154,7 +161,7 @@ class COBAgentBlock extends COBBlock {
      * @return string
      */
     public function getRemoveScript() {
-        return $this->removeScript;
+        return $this->removeScript ?? NULL;
     }
 
     /**
@@ -163,14 +170,15 @@ class COBAgentBlock extends COBBlock {
      * @return int
      */
     public function getEventScriptCount() {
-        return sizeof($this->eventScripts);
+        return isset($this->eventScripts) ? sizeof($this->eventScripts) : 0;
     }
+
     /**
      * Gets the agent's event scripts
-     * @return string[] array of strings, each string is an event script
+     * @return string[]|null array of strings, each string is an event script
      */
     public function getEventScripts() {
-        return $this->eventScripts;
+        return $this->eventScripts ?? NULL;
     }
 
     /**
@@ -178,30 +186,35 @@ class COBAgentBlock extends COBBlock {
      *
      * Event scripts are not necessarily in any order, so you have to work out what each script is for yourself.
      * @param int $whichScript Index of script in event scripts array
-     * @return string A string containing the event script. Each line is separated by a comma typically.
+     * @return string|null A string containing the event script. Each line is separated by a comma typically.
      */
-    public function getEventScript($whichScript) {
-        return $this->eventScripts[$whichScript];
+    public function getEventScript(int $whichScript) {
+		if (!isset($this->eventScripts)) {
+			return NULL;
+		}
+        return $this->eventScripts[$whichScript] ?? NULL;
     }
+
     /**
      * Gets the thumbnail of this agent as would be shown in the Injector
      *
-     * @return SpriteFrame SpriteFrame of the thumbnail
+     * @return SpriteFrame|null SpriteFrame of the thumbnail
      */
     public function getThumbnail() {
-        return $this->thumbnail;
+        return $this->thumbnail ?? NULL;
     }
 
     /**
      * Gets dependencies of the given type
      *
      * If type is null, will get all dependencies.
-     * @param string $type one of the COB_DEPENDENCY_* constants, defined above.
+     * @param string|null $type one of the COB_DEPENDENCY_* constants, defined above.
      * @return COBDependency[] An array of COBDependency objects
      */
-    public function getDependencies($type = null) {
-        $dependenciesToReturn = array();
-        foreach ($this->dependencies as $dependency) {
+    public function getDependencies(string $type = null) {
+		$dependencies = $this->dependencies ?? [];
+        $dependenciesToReturn = [];
+        foreach ($dependencies as $dependency) {
             if ($type == null || $type == $dependency->getType()) {
                 $dependenciesToReturn[] = $dependency;
             }
@@ -214,10 +227,10 @@ class COBAgentBlock extends COBBlock {
      *
      * Reserved values weren't ever officially used by CL,
      * but someone might find them useful for something else.
-     * @return int
+     * @return int|null
      */
     public function getReserved1() {
-        return $this->reserved1;
+        return $this->reserved1 ?? NULL;
     }
 
     /**
@@ -225,10 +238,10 @@ class COBAgentBlock extends COBBlock {
      *
      * Reserved values weren't ever officially used by CL,
      * but someone might find them useful for something else.
-     * @return int
+     * @return int|null
      */
     public function getReserved2() {
-        return $this->reserved2;
+        return $this->reserved2 ?? NULL;
     }
 
     /**
@@ -236,10 +249,10 @@ class COBAgentBlock extends COBBlock {
      *
      * Reserved values weren't ever officially used by CL,
      * but someone might find them useful for something else.
-     * @return int
+     * @return int|null
      */
     public function getReserved3() {
-        return $this->reserved3;
+        return $this->reserved3 ?? NULL;
     }
 
     /**
@@ -248,7 +261,7 @@ class COBAgentBlock extends COBBlock {
      * @param COBDependency $dependency The COBDependency to add.
      */
     public function addDependency(COBDependency $dependency) {
-        if (!in_array($dependency->getName(), $this->dependencies)) {
+        if (!in_array($dependency, $this->dependencies)) {
             $this->dependencies[] = $dependency;
         }
     }
@@ -258,7 +271,7 @@ class COBAgentBlock extends COBBlock {
      *
      * @param string $installScript the text of the script to add
      */
-    public function setInstallScript($installScript) {
+    public function setInstallScript(string $installScript) {
         $this->installScript = $installScript;
     }
 
@@ -267,7 +280,7 @@ class COBAgentBlock extends COBBlock {
      *
      * @param string $removeScript The text of the script to add
      */
-    public function setRemoveScript($removeScript) {
+    public function setRemoveScript(string $removeScript) {
         $this->removeScript = $removeScript;
     }
 
@@ -276,7 +289,7 @@ class COBAgentBlock extends COBBlock {
      *
      * @param string $eventScript The text of the script to add
      */
-    public function addEventScript($eventScript) {
+    public function addEventScript(string $eventScript) {
         $this->eventScripts[] = $eventScript;
     }
 
@@ -286,7 +299,7 @@ class COBAgentBlock extends COBBlock {
      * @param int $time The date this agent was last injected as a UNIX timestamp
      * @return bool
      */
-    public function setLastUsageDate($time) {
+    public function setLastUsageDate(int $time) {
         if ($time > time()) {
             return false;
         } else {
@@ -300,7 +313,7 @@ class COBAgentBlock extends COBBlock {
      *
      * @param int $time The date this agent will expire as a UNIX timestamp
      */
-    public function setExpiryDate($time) {
+    public function setExpiryDate(int $time) {
         $this->expiryDate = $time;
     }
 
@@ -309,15 +322,16 @@ class COBAgentBlock extends COBBlock {
      *
      * @param int $quantity The quantity available, an integer. 0xFF means infinite.
      */
-    public function setQuantityAvailable($quantity) {
+    public function setQuantityAvailable(int $quantity) {
         $this->quantityAvailable = $quantity;
     }
+
     /**
      * Sets the interval required between re-use.
      *
      * @param int $interval The interval in seconds, between re-use of this agent.
      */
-    public function setReuseInterval($interval) {
+    public function setReuseInterval(int $interval) {
         $this->reuseInterval = $interval;
     }
 
@@ -330,7 +344,7 @@ class COBAgentBlock extends COBBlock {
      * @param int $reserved2 The second reserved variable
      * @param int $reserved3 The third reserved variable
      */
-    public function setReserved($reserved1, $reserved2, $reserved3) {
+    public function setReserved(int $reserved1, int $reserved2, int $reserved3) {
         $this->reserved1 = $reserved1;
         $this->reserved2 = $reserved2;
         $this->reserved3 = $reserved3;
@@ -343,7 +357,7 @@ class COBAgentBlock extends COBBlock {
      * @throws Exception
      */
     public function setThumbnail(SpriteFrame $frame) {
-        if ($this->thumbnail != null) {
+        if (isset($this->thumbnail)) {
             throw new Exception('Thumbnail already added');
         }
         $this->thumbnail = $frame;
@@ -358,7 +372,7 @@ class COBAgentBlock extends COBBlock {
      * @throws Exception
      */
     public function addC1RemoveScriptFromRCB(IReader $reader) {
-        if ($this->removeScript != '') {
+        if (isset($this->removeScript) && $this->removeScript != '') {
             throw new Exception('Script already added!');
         }
         $rcb = new COB($reader);
@@ -389,7 +403,7 @@ class COBAgentBlock extends COBBlock {
         $expiryYear = $reader->readInt(2);
         $expiryDate = mktime(0, 0, 0, $expiryMonth, $expiryDay, $expiryYear);
 
-        $reserved = array($reader->readInt(4), $reader->readInt(4), $reader->readInt(4));
+        $reserved = [$reader->readInt(4), $reader->readInt(4), $reader->readInt(4)];
 
         $agentName = $reader->readCString();
         $agentDescription = $reader->readCString();
@@ -398,28 +412,37 @@ class COBAgentBlock extends COBBlock {
         $removeScript = str_replace(',', "\n", $reader->readCString());
 
         $numEventScripts = $reader->readInt(2);
-
-        $eventScripts = array();
-
+		$scripts = [];
+		if ($numEventScripts > 300) {
+			throw new Exception("Possibly bad COB read. Expecting: $numEventScripts event scripts");
+		}
         for ($i = 0; $i < $numEventScripts; $i++) {
-            $eventScripts[] = str_replace(',', "\n", $reader->readCString());
+            $scripts[] = str_replace(',', "\n", $reader->readCString());
         }
-        $numDependencies = $reader->readInt(2);
-        $dependencies = array();
+        $dependencyCount = $reader->readInt(2);
+        $dependencies = [];
 
-        for ($i = 0; $i < $numDependencies; $i++) {
+		if ($dependencyCount > 300) {
+			throw new Exception("Too many dependencies defined for $agentName; Expectred $dependencyCount");
+		}
+
+        for ($i = 0; $i < $dependencyCount; $i++) {
             $type = ($reader->readInt(2) == 0) ? DEPENDENCY_SPRITE : DEPENDENCY_SOUND;
             $name = $reader->readCString();
             $dependencies[] = new COBDependency($type, $name);
         }
-        $thumbWidth = $reader->readInt(2);
-        $thumbHeight = $reader->readInt(2);
+        $thumbWidth = $reader->readInt(2) ?? 0;
+        $thumbHeight = $reader->readInt(2) ?? 0;
 
-        $thumbnail = new S16Frame($reader, '565', $thumbWidth, $thumbHeight, $reader->getPosition());
-        $reader->skip($thumbHeight*$thumbWidth*2);
+        if ($thumbWidth !== 0 && $thumbHeight !== 0) {
+            $thumbnail = new S16Frame($reader, '565', $thumbWidth, $thumbHeight, $reader->getPosition());
+            $reader->skip($thumbHeight * $thumbWidth * 2);
+        } else {
+            $thumbnail = NULL;
+        }
 
         //parsing finished, onto making an AgentBlock.
-        $agentBlock = new COBAgentBlock($agentName, $agentDescription);
+        $agentBlock = new COBAgentBlock($agentName, $agentDescription, $reader->getSubString(0));
         $agentBlock->setQuantityAvailable($quantityAvailable);
         $agentBlock->setReuseInterval($reuseInterval);
         $agentBlock->setExpiryDate($expiryDate);
@@ -427,15 +450,15 @@ class COBAgentBlock extends COBBlock {
         $agentBlock->setReserved($reserved[0], $reserved[1], $reserved[2]);
         $agentBlock->setInstallScript($installScript);
         $agentBlock->setRemoveScript($removeScript);
-        foreach ($eventScripts as $eventScript) {
-            $agentBlock->addEventScript($eventScript);
-        }
+		$agentBlock->eventScripts = $scripts;
+
         foreach ($dependencies as $dependency) {
             $agentBlock->addDependency($dependency);
         }
-        $agentBlock->setThumbnail($thumbnail);
+        if (!empty($thumbnail)) {
+            $agentBlock->setThumbnail($thumbnail);
+        }
         return $agentBlock;
-
     }
 
     /**
@@ -458,21 +481,23 @@ class COBAgentBlock extends COBBlock {
         $numObjectScripts = $reader->readInt(2);
         $numInstallScripts = $reader->readInt(2);
         $reader->skip(4); //$quantityUsed = $reader->readInt(4)
-        $objectScripts = array();
+        $objectScripts = [];
         for ($i = 0; $i < $numObjectScripts; $i++) {
             $scriptSize = $reader->readInt(1);
             if ($scriptSize == 255) {
                 $scriptSize = $reader->readInt(2);
             }
-            $objectScripts[$i] = $reader->read($scriptSize);
+            $objectScript = $reader->read($scriptSize);
+            $objectScripts[$i] = $objectScript;
         }
-        $installScripts = array();
+        $installScripts = [];
         for ($i = 0; $i < $numInstallScripts; $i++) {
             $scriptSize = $reader->readInt(1);
             if ($scriptSize == 255) {
                 $scriptSize = $reader->readInt(2);
             }
-            $installScripts[$i] = $reader->read($scriptSize);
+            $installScript = $reader->read($scriptSize);
+            $installScripts[$i] = $installScript;
         }
         $pictureWidth = $reader->readInt(4);
         $pictureHeight = $reader->readInt(4);
@@ -482,20 +507,23 @@ class COBAgentBlock extends COBBlock {
             $sprFrame = new SPRFrame($reader, $pictureWidth, $pictureHeight);
             $sprFrame->flip();
         }
+        $reader->skip($pictureWidth * $pictureHeight);
 
         $agentName = $reader->read($reader->readInt(1));
 
-        $agentBlock = new COBAgentBlock($agentName, '');
+        $agentBlock = new COBAgentBlock($agentName, '', $reader->getSubString(0));
         $agentBlock->setQuantityAvailable($quantityAvailable);
         $agentBlock->setExpiryDate($expiryDate);
-        if ($sprFrame != null) {
+        if (!empty($sprFrame)) {
             $agentBlock->setThumbnail($sprFrame);
         }
         foreach ($objectScripts as $objectScript) {
             $agentBlock->addEventScript($objectScript);
         }
-        $agentBlock->setInstallScript(implode("\n*c2ephp Install script separator\n", $installScripts));
+        $agentBlock->setInstallScript(trim(implode("\n\n*c2ephp Install script separator\n", $installScripts)));
         return $agentBlock;
     }
+
+
     /// @endcond
 }
