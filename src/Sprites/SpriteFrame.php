@@ -3,6 +3,7 @@
 namespace C2ePhp\Sprites;
 
 use Exception;
+use ReflectionClass;
 
 /**
  * Class representing a single frame of a sprite.
@@ -33,7 +34,7 @@ abstract class SpriteFrame {
      * @throws Exception
      * @see C16Frame::C16Frame()
      */
-    public function __construct($width, $height, $decoded = false) {
+    public function __construct(int $width, int $height, bool $decoded = false) {
         if ($width == 0) {
             throw new Exception('Zero width');
         } else if ($height == 0) {
@@ -88,7 +89,7 @@ abstract class SpriteFrame {
      * @param int $y The y-coordinate of the pixel to get.
      * @return int[] An associative array containing the keys 'red','green','blue','alpha'.
      */
-    public function getPixel($x, $y) {
+    public function getPixel(int $x, int $y) {
         $this->ensureDecoded();
         $colorIndex = imagecolorat($this->gdImage, $x, $y);
         return imagecolorsforindex($this->gdImage, $colorIndex);
@@ -103,7 +104,7 @@ abstract class SpriteFrame {
      * @param int $g The green component of the pixel. 0-255.
      * @param int $b The blue component of the pixel. 0-255.
      */
-    public function setPixel($x, $y, $r, $g, $b) {
+    public function setPixel(int $x, int $y, int $r, int $g, int $b) {
         $this->ensureDecoded();
         imagesetpixel($this->gdImage, $x, $y, imagecolorallocate($this->gdImage, $r, $g, $b));
     }
@@ -115,7 +116,7 @@ abstract class SpriteFrame {
      * This causes $gdImage to point to a usable GD Image resource
      * if it doesn't already.
      */
-    protected function ensureDecoded() {
+    function ensureDecoded() {
         if (!$this->decoded) {
             $this->decode();
         }
@@ -155,9 +156,10 @@ abstract class SpriteFrame {
      * override this function in your class to provide extra magic.
      * @endinternal
      */
-    public function toSpriteFrame($type) {
+    public function toSpriteFrame(string $type) {
         $this->ensureDecoded();
-        if (substr(get_class($this), 0, 3) == $type && substr(get_class($this), 3) == 'Frame') {
+		$thisType = (new ReflectionClass($this))->getShortName();
+        if (substr($thisType, 0, 3) == $type && substr($thisType, 3) == 'Frame') {
             return $this;
         }
         switch ($type) {

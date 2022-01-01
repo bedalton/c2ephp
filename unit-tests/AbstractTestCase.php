@@ -1,6 +1,7 @@
 <?php
-require_once(dirname(__FILE__).'/../agents/PRAYFile.php');
-require_once(dirname(__FILE__).'/../support/FileReader.php');
+
+use C2ePhp\Agents\PRAY\PRAYFile;
+use C2ePhp\Support\FileReader;
 
 abstract class c2ephpAbstractTestCase extends PHPUnit_Framework_TestCase {
     /// @brief Agent Files fixture
@@ -9,7 +10,7 @@ abstract class c2ephpAbstractTestCase extends PHPUnit_Framework_TestCase {
      * Use @dataProvider createPrayFiles. \n
      * function prototype: someTest($prayFile, $prayFileFacts); \n
      * Current facts: 'block count'
-     * 
+     *
      */
     public function createAgentFiles() {
         $files = array(
@@ -52,4 +53,3 @@ abstract class c2ephpAbstractTestCase extends PHPUnit_Framework_TestCase {
 
     }
 }
-?>

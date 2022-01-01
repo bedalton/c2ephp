@@ -20,7 +20,7 @@ class COBDependency {
      * @param string $type The type of dependency ('sprite' or 'sound').
      * @param string $name The name of the dependency (four characters, no file extension)
      */
-    public function __construct($type, $name) {
+    public function __construct(string $type, string $name) {
         $this->type = $type;
         $this->name = $name;
     }
@@ -40,5 +40,10 @@ class COBDependency {
     public function getName() {
         return $this->name;
     }
+
+
+	public function __toString() {
+		return $this->getType() . '(' . $this->getName() . ')';
+	}
 
 }

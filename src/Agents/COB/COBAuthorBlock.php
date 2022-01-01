@@ -13,12 +13,19 @@ class COBAuthorBlock extends COBBlock {
 
     /// @cond INTERNAL_DOCS
 
+	/** @var int */
     private $creationTime;
+	/** @var int */
     private $version;
+	/** @var int */
     private $revision;
+	/** @var string  */
     private $authorName;
+	/** @var string  */
     private $authorEmail;
+	/** @var string  */
     private $authorURL;
+	/** @var string  */
     private $authorComments;
 
     /// @endcond
@@ -35,8 +42,8 @@ class COBAuthorBlock extends COBBlock {
      * @param int $revision the COB's revision number (integer)
      * @throws Exception
      */
-    public function __construct($authorName, $authorEmail, $authorURL, $authorComments, $creationTime, $version, $revision) {
-        parent::__construct(COB_BLOCK_AUTHOR);
+    public function __construct(string $bytes, string $authorName, string $authorEmail, string $authorURL, string $authorComments, int $creationTime, string $version, int $revision) {
+        parent::__construct(COB_BLOCK_AUTHOR, $bytes);
         $this->authorName = $authorName;
         $this->authorEmail = $authorEmail;
         $this->authorURL = $authorURL;
@@ -51,10 +58,10 @@ class COBAuthorBlock extends COBBlock {
      *
      * @return string
      * @throws Exception
-     */
+	 */
     public function compile() {
         // TODO: implement
-        throw new Exception("COBAgentBlock::Compile not implemented");
+        throw new Exception('COBAgentBlock::Compile not implemented');
     }
 
     /**
@@ -104,7 +111,7 @@ class COBAuthorBlock extends COBBlock {
     /**
      * Gets the COB's version number
      *
-     * @return int
+     * @return string
      * @see getRevision()
      */
     public function getVersion() {
@@ -142,7 +149,7 @@ class COBAuthorBlock extends COBBlock {
         $authorEmail = $reader->readCString();
         $authorURL = $reader->readCString();
         $authorComments = $reader->readCString();
-        return new COBAuthorBlock($authorName, $authorEmail, $authorURL, $authorComments, $creationTime, $version, $revision);
+        return new COBAuthorBlock($reader->getSubString(0), $authorName, $authorEmail, $authorURL, $authorComments, $creationTime, $version, $revision);
     }
     /// @endcond
 }

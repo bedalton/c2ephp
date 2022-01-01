@@ -25,7 +25,7 @@ class PrayDependency {
      * @param int $category One of the PRAY_DEPENDENCY_* constants
      * @param string $filename The name of the file this dependency relates to.
      */
-    public function __construct($category, $filename) {
+    public function __construct(int $category, string $filename) {
         $this->category = $category;
         $this->filename = $filename;
     }

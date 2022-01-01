@@ -2,6 +2,9 @@
 
 namespace C2ePhp\Support;
 
+
+use Exception;
+
 /**
  * Class to read from strings in the same way as files
  *
@@ -15,6 +18,8 @@ class StringReader implements IReader {
 
     private $position;
     private $string;
+
+    private $size;
     /// @endcond
 
     /**
@@ -22,67 +27,80 @@ class StringReader implements IReader {
      * Initialises the position to 0.
      * @param string $string string contents to read from
      */
-    public function __construct($string) {
+    public function __construct(string $string) {
         $this->string = $string;
         $this->position = 0;
+        $this->size = strlen($string);
     }
 
-    /**
-     * Reads a given length of bytes as a string
-     * @param int $length
-     * @return false|string
-     */
-    public function read($length) {
+	/**
+	 * Reads a given length of bytes as a string
+	 * @param int $length length of string to read
+	 * @param bool $cpDecode <b>true</b> to decode string from CP-1252 to UTF-8
+	 * @param bool $throwing throw exception on not-enough-bytes
+	 * @return false|string
+	 */
+    public function read(int $length, bool $cpDecode = FileReader::CP_DECODING_DEFAULT, bool $throwing = TRUE) {
         if ($length > 0) {
-            if ($this->position+$length > strlen($this->string)) {
-                return false;
+            if (($this->position + $length) > $this->size) {
+                return NULL;
             }
             $str = substr($this->string, $this->position, $length);
-
+			if ($cpDecode) {
+				$str = __ef_decode_reader($str);
+			}
             $this->position += $length;
             return $str;
         }
-        return "";
+        return '';
     }
 
     /**
      * Reads a c-string with self determined length
-     * @return false|string
+     * @return string
      */
     public function readCString() {
         $string = '';
-        while (($char = $this->read(1)) !== false) {
-            $string .= $char;
-            if ($char == "\0") {
+        while (!is_null($char = $this->read(1, FileReader::CP_DECODING_DEFAULT, FALSE))) {
+            if (ord($char) === 0) {
                 break;
             }
+			$string .= $char;
         }
-        return substr($string, 0, -1);
+        return $string;
     }
 
-    /**
-     * Seeks to a given position in the stream
-     * @param $position
-     */
+	/**
+	 * Seeks to a given position in the stream
+	 * @param $position
+	 * @throws Exception
+	 */
     public function seek($position) {
+		if ($position > $this->size) {
+			throw new Exception('Cannot seek past end of stream');
+		}
         $this->position = $position;
     }
 
-    /**
-     * Skips a given number of bytes in the stream
-     * @param $count
-     */
+	/**
+	 * Skips a given number of bytes in the stream
+	 * @param $count
+	 * @throws Exception
+	 */
     public function skip($count) {
+		if ($this->position+$count > $this->size) {
+			throw new Exception('Cannot skip bytes past end of stream');
+		}
         $this->position += $count;
     }
 
     /**
      * Gets an int using the given number of bytes in little endian
      * @param int $length
-     * @return false|int
+     * @return null|int
      */
-    public function readInt($length) {
-        return BytesToIntLilEnd($this->read($length));
+    public function readInt(int $length) {
+        return bytes_to_little_endian($this->read($length, FALSE));
     }
 
     /**
@@ -94,16 +112,28 @@ class StringReader implements IReader {
     }
 
     /**
-     * Reads a substring of this string reader
-     * Reads to end if no length is specified
-     * @param int $start
-     * @param bool|int $length
-     * @return false|string
+     * Check if there is more data at current position in buffer
+     * @return bool <b>true</b> if there is more data to read at current buffer position
      */
-    public function getSubString($start, $length = FALSE) {
+    public function hasNext() {
+        return $this->getPosition() < $this->size;
+    }
+
+	/**
+	 * Reads a substring of this string reader
+	 * Reads to end if no length is specified
+	 * @param int $start
+	 * @param bool|int $length
+	 * @param bool $safe
+	 * @return false|string
+	 */
+    public function getSubString(int $start, $length = FALSE, bool $safe = FALSE) {
         if ($length == FALSE) {
-            $length = strlen($this->string)-$start;
+			return substr($this->string, $start);
         }
+		if ($safe) {
+			$length = min($this->size - $start, $length);
+		}
         return substr($this->string, $start, $length);
     }
 }
@@ -111,16 +141,16 @@ class StringReader implements IReader {
 /**
  * Reads bytes into an int in little endian order
  * @param false|string $string
- * @return false|int
+ * @return int|null
  */
-function bytesToIntLilEnd($string) { //little endian
-    if ($string == "") {
-        return false;
+function bytes_to_little_endian($string) { //little endian
+    if (is_null($string) || strlen($string) < 1) {
+        return NULL;
     }
     $length = strlen($string);
     $int = 0;
     for ($i = 0; $i < $length; $i++) {
-        $int += ord($string{$i}) << ($i*8);
+        $int += ord($string[$i]) << ($i*8);
     }
     return $int;
 }

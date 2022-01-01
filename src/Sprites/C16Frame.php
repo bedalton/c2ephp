@@ -13,7 +13,7 @@ class C16Frame extends SpriteFrame {
 
     private $encoding;
 
-    private $lineOffset = array();
+    private $lineOffset = [];
 
     private $reader;
     private $offset;
@@ -75,38 +75,45 @@ class C16Frame extends SpriteFrame {
     protected function decode() {
         $image = imagecreatetruecolor($this->getWidth(),
             $this->getHeight());
+
+        imagesavealpha($image, true);
+        $transparent = imagecolorallocatealpha($image, 0, 0, 0, 127);
+        imagefill($image, 0, 0, $transparent);
         $this->reader->seek($this->offset);
         for ($y = 0; $y < $this->getHeight(); $y++) {
             for ($x = 0; $x < $this->getWidth();) {
                 $run = $this->reader->readInt(2);
                 if (($run & 0x0001) > 0) {
-                    $run_type = "colour";
+                    $run_type = 'colour';
                 } else {
-                    $run_type = "black";
+                    $run_type = 'black';
                 }
                 $run_length = ($run & 0x7FFF) >> 1;
-                if ($run_type == "black") {
-                    $z = $x + $run_length;
+                $z = $x + $run_length;
+                if ($run_type == 'black') {
                     for (; $x < $z; $x++) {
-                        imagesetpixel($image, $x, $y, imagecolorallocate($image, 0, 0, 0));
+                        imagesetpixel($image, $x, $y, $transparent);
                     }
                 } else //colour run
                 {
-                    $z = $x + $run_length;
                     for (; $x < $z; $x++) {
                         $pixel = $this->reader->readInt(2);
-                        if ($this->encoding == "565") {
+                        if ($this->encoding == '565') {
                             $red = ($pixel & 0xF800) >> 8;
                             $green = ($pixel & 0x07E0) >> 3;
                             $blue = ($pixel & 0x001F) << 3;
-                        } else if ($this->encoding == "555") {
+                        } else if ($this->encoding == '555') {
                             $red = ($pixel & 0x7C00) >> 7;
                             $green = ($pixel & 0x03E0) >> 2;
                             $blue = ($pixel & 0x001F) << 3;
                         } else {
-                            throw new Exception("Invalid encoding: ".$this->encoding);
+                            throw new Exception("Invalid encoding: $this->encoding");
                         }
-                        $colour = imagecolorallocate($image, $red, $green, $blue);
+                        if ($red + $green + $blue === 0) {
+                            $colour = $transparent;
+                        } else {
+                            $colour = imagecolorallocate($image, $red, $green, $blue);
+                        }
                         imagesetpixel($image, $x, $y, $colour);
                     }
                 }
@@ -129,7 +136,7 @@ class C16Frame extends SpriteFrame {
      */
     public function encode() {
         $data = '';
-        $lineOffsets = array();
+        $lineOffsets = [];
         for ($y = 0; $y < $this->getHeight(); $y++) {
             $wasBlack = 0;
             $runLength = 0;
@@ -197,10 +204,10 @@ class C16Frame extends SpriteFrame {
                 }
             }
             //line terminating zero tag.
-            $data .= pack('xx');
+            $data .= pack('xx', 0);
         }
         //image terminating zero tag
-        $data .= pack('xx');
-        return array('lineOffsets' => $lineOffsets, 'data' => $data);
+        $data .= pack('xx', 0);
+        return ['lineOffsets' => $lineOffsets, 'data' => $data];
     }
 }

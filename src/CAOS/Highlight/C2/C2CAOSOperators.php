@@ -1,4 +1,4 @@
-<?php /** @noinspection SpellCheckingInspection */
+<?php
 /** @noinspection PhpUnused */
 
 /// @cond INTERNAL_DOCS

@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection SpellCheckingInspection */
+/** @noinspection PhpDefineCanBeReplacedWithConstInspection */
 
 include_once dirname(__FILE__) . '/../CreatureHistory/constants.php';
 
@@ -62,7 +63,7 @@ define('PRAY_FLAG_ZLIB_COMPRESSED', 1);
 
 /**
  * @relates PrayDependency
- * @name Pray Dependency Types
+ * PRAY Dependency Types
  *
  * All the possible types of Pray Dependency.
  */

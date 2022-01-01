@@ -20,13 +20,13 @@ class GENEBlock extends PrayBlock {
      *
      * If $prayFile is not null, all the data for this block
      * will be read from the PRAYFile.
-     * @param PRAYFile $prayFile The PRAYFile object this block belongs to. Can be null.
+     * @param PRAYFile|null $prayFile The PRAYFile object this block belongs to. Can be null.
      * @param string $name The block's name. This is a creature's moniker with .genetics appended.
      * @param string $content The block's binary data. Used when constructing from a PrayFile
      * @param int $flags The block's flags, which apply to the binary data as-is.
      * @throws Exception
      */
-    public function __construct($prayFile, $name, $content, $flags) {
+    public function __construct(?PRAYFile $prayFile, string $name, string $content, int $flags) {
         parent::__construct($prayFile, $name, $content, $flags, PRAY_BLOCK_GENE);
 
     }

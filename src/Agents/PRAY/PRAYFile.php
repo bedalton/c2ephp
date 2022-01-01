@@ -31,7 +31,7 @@ class PRAYFile {
      * If reader is null then this is a user-generated PRAYFile.
      * @throws Exception
      */
-    function __construct($reader = null) {
+    function __construct(?IReader $reader = null) {
         if ($reader instanceof IReader) {
             $this->reader = $reader;
             $this->parse();
@@ -45,26 +45,23 @@ class PRAYFile {
     /**
      * Reads the PRAYFile stored in the reader. Called automatically.
      *
-     * @return PrayBlock[]|false
-     * @throws Exception
+     * @return void
+	 * @throws Exception
      */
     private function parse() {
         if (!$this->parsed) {
             if ($this->parseHeader()) {
                 /** @noinspection PhpStatementHasEmptyBodyInspection */
-                while ($this->parseBlockHeader()) {
+                while ($this->reader->hasNext() && $this->parseBlockHeader()) {
                 }
                 $this->parsed = true;
                 //print_r($this->blocks);
-                return $this->blocks;
-            } else {
-                echo "Failed at block header: NOT A PRAY FILE";
-                return FALSE;
-            }
-        }
+			} else {
+                echo 'Failed at block header: NOT A PRAY FILE';
+			}
+		}
 
-        return $this->blocks;
-    }
+	}
 
     /// @endcond
 
@@ -91,7 +88,7 @@ class PRAYFile {
     public function addBlock(PrayBlock $block) {
         foreach ($this->blocks as $checkBlock) {
             if ($checkBlock->getName() == $block->getName()) {
-                throw new Exception("PRAY Files cannot contain multiple blocks with the same name");
+                throw new Exception('PRAY Files cannot contain multiple blocks with the same name');
             }
         }
         $this->blocks[] = $block;
@@ -112,9 +109,9 @@ class PRAYFile {
             return $this->blocks;
         } else {
             if (is_string($type)) {
-                $type = array($type);
+                $type = [$type];
             }
-            $blocksOfType = array();
+            $blocksOfType = [];
             foreach ($this->blocks as $block) {
                 if (in_array($block->getType(), $type)) {
                     $blocksOfType[] = $block;
@@ -132,8 +129,8 @@ class PRAYFile {
      * @param string $name
      * @return PrayBlock|null
      */
-    public function getBlockByName($name) {
-        foreach ($this->blocks as $blockId => $block) {
+    public function getBlockByName(string $name) {
+        foreach ($this->blocks as $block) {
             if ($block->getName() == $name) {
                 return $block;
             }
@@ -148,7 +145,7 @@ class PRAYFile {
      *  It's not much of a header, but it's a header nonetheless.
      */
     private function parseHeader() {
-        if ($this->reader->read(4) == "PRAY") {
+        if ($this->reader->read(4) == 'PRAY') {
             return true;
         } else {
             return false;
@@ -166,11 +163,11 @@ class PRAYFile {
      */
     private function parseBlockHeader() {
         $blockType = $this->reader->read(4);
-        if ($blockType == "") {
+        if (empty($blockType)) {
             return false;
         }
         $name = trim($this->reader->read(128));
-        if ($name == "") {
+        if (empty($name)) {
             return false;
         }
         $length = $this->reader->readInt(4);
@@ -187,8 +184,10 @@ class PRAYFile {
         }
 
         $content = $this->reader->read($length);
+        if (strlen($content) !== $length) {
+            throw new Exception("Insufficient number of bytes returned from read in block: $blockType->$name");
+        }
         $this->blocks[] = PrayBlock::makePrayBlock($blockType, $this, $name, $content, $flags);
-
         return true;
     }
 

@@ -1,7 +1,7 @@
 <?php /** @noinspection PhpUnused */
 
 namespace C2ePhp\CreatureHistory;
-require_once(dirname(__FILE__) . '/constants.php');
+require_once(realpath(dirname(__FILE__) . '/constants.php'));
 
 /**
  * Class to represent events in a creature's life
@@ -43,28 +43,28 @@ class CreatureHistoryEvent {
 
     /// @endcond
 
-    /**
-     * Instantiates a new CreatureHistoryEvent.
-     *
-     * @param int $eventType The event number as defined by the CREATUREHISTORY_EVENT_* constants.
-     * @param int $worldTime The world's age in ticks at the time of this
-     * event.
-     * @param int $creatureAge The age of the creature in ticks at the
-     * time of this event
-     * @param int $timestamp The time of this event as a unix timestamp.
-     * (number of seconds passed since 1st Jan, 1970)
-     * @param int $lifeStage The life stage this creature had achieved at
-     * the time of this event.
-     * @param string  $moniker1 The first moniker associated with this event.
-     * @param string  $moniker2 The second moniker associated with this event.
-     * @param string  $userText The user text associated with this event.
-     * @param string  $photograph The photograph associated with this event.
-     * @param string  $worldName The name of the world the creature was inhabiting at the time of this event
-     * @param int $worldUID The UID of the world the creature was inhabiting at the the time of this event
-     * @see getMoniker1(), getMoniker2(), getUserText,
-     * GetPhotograph()
-     */
-    public function __construct($eventType, $worldTime, $creatureAge, $timestamp, $lifeStage, $moniker1, $moniker2, $userText, $photograph, $worldName, $worldUID) {
+	/**
+	 * Instantiates a new CreatureHistoryEvent.
+	 *
+	 * @param int $eventType The event number as defined by the CREATUREHISTORY_EVENT_* constants.
+	 * @param int $worldTime The world's age in ticks at the time of this
+	 * event.
+	 * @param int $creatureAge The age of the creature in ticks at the
+	 * time of this event
+	 * @param int $timestamp The time of this event as a unix timestamp.
+	 * (number of seconds passed since 1st Jan, 1970)
+	 * @param int $lifeStage The life stage this creature had achieved at
+	 * the time of this event.
+	 * @param string|null $moniker1 The first moniker associated with this event.
+	 * @param string|null $moniker2 The second moniker associated with this event.
+	 * @param string|null $userText The user text associated with this event.
+	 * @param string|null $photograph The photograph associated with this event.
+	 * @param string|null $worldName The name of the world the creature was inhabiting at the time of this event
+	 * @param string|null $worldUID The UID of the world the creature was inhabiting at the the time of this event
+	 * @see getMoniker1(), getMoniker2(), getUserText,
+	 * GetPhotograph()
+	 */
+    public function __construct(int $eventType, int $worldTime, int $creatureAge, int $timestamp, int $lifeStage, ?string $moniker1, ?string $moniker2, ?string $userText, ?string $photograph, ?string $worldName, ?string $worldUID) {
         $this->eventType = $eventType;
         $this->worldTime = $worldTime;
         $this->creatureAge = $creatureAge;
@@ -81,11 +81,11 @@ class CreatureHistoryEvent {
     /**
      * Add DS-specific information to the CreatureHistoryEvent
      *
-     * @param string $dsUserID The UID of the Docking Station user whose world the creature was in at the time of the event
+     * @param string|null $dsUserID The UID of the Docking Station user whose world the creature was in at the time of the event
      * @param mixed $unknown1 I don't know! But it comes right after the DS-UID in the GLST format.
      * @param mixed $unknown2 I don't know! But it comes right after unknown1.
      */
-    public function addDSInfo($dsUserID, $unknown1, $unknown2) {
+    public function addDSInfo(?string $dsUserID, $unknown1, $unknown2) {
         $this->dockingStationUser = $dsUserID;
         $this->unknown1 = $unknown1;
         $this->unknown2 = $unknown2;
@@ -99,7 +99,7 @@ class CreatureHistoryEvent {
      * @param int $format Which game to compile it for (a GLST_FORMAT_* constant)
      * @return string binary string containing GLST data ready to be put into a GLST history.
      */
-    public function compile($format) {
+    public function compile(int $format) {
         /** @noinspection SpellCheckingInspection */
         $data = pack('VVVVV', $this->eventType, $this->worldTime, $this->creatureAge, $this->timestamp, $this->lifeStage);
         $data .= pack('V', strlen($this->moniker1)) . $this->moniker1;

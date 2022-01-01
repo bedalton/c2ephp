@@ -29,14 +29,14 @@ class SPRFrame extends SpriteFrame {
      * @param IReader|resource $reader Either an IReader or a GD Image resource
      * @param int $width Ignored when creating an SPRFrame from a GD image.
      * @param int $height Ignored when creating an SPRFrame from a GD image.
-     * @param int $offset How far through the IReader the SPRFrame is. May not ever be used.
+     * @param int|null $offset How far through the IReader the SPRFrame is. May not ever be used.
      * @throws Exception
      */
-    public function __construct($reader, $width = 0, $height = 0, $offset = false) {
+    public function __construct($reader, int $width = 0, int $height = 0, ?int $offset = NULL) {
         if ($reader instanceof IReader) {
             $this->reader = $reader;
             parent::__construct($width, $height);
-            if ($offset !== false) {
+            if (!empty($offset)) {
                 $this->offset = $offset;
             } else {
                 $this->offset = $this->reader->getPosition();
@@ -49,6 +49,9 @@ class SPRFrame extends SpriteFrame {
                     self::$sprToRGB[$i] = array('r'=>$paletteReader->readInt(1)*4, 'g'=>$paletteReader->readInt(1)*4, 'b'=>$paletteReader->readInt(1)*4);
                 }
                 unset($paletteReader);
+				if (count(self::$sprToRGB) < 255) {
+					throw new Exception("SPR Palette data is too shallow. Not enough color entries found");
+				}
             }
         } else if (get_resource_type($reader) == 'gd') {
             parent::__construct(imagesx($reader), imagesy($reader), true);
@@ -86,13 +89,23 @@ class SPRFrame extends SpriteFrame {
      */
     protected function decode() {
         $image = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+        imagesavealpha($image, true);
+        $transparent = imagecolorallocatealpha($image, 0, 0, 0, 127);
+        imagefill($image, 0, 0, $transparent);
         $this->reader->seek($this->offset);
+
         for ($y = 0; $y < $this->getHeight(); $y++)
         {
             for ($x = 0; $x < $this->getWidth(); $x++)
             {
-                $colour = self::$sprToRGB[$this->reader->readInt(1)];
-                imagesetpixel($image, $x, $y, imagecolorallocate($image, $colour['r'], $colour['g'], $colour['b']));
+                $colour = $this->reader->readInt(1);
+                if ($colour === 0) {
+                    $colour = $transparent;
+                } else {
+                    $colour = self::$sprToRGB[$colour];
+                    $colour = imagecolorallocate($image, $colour['r'], $colour['g'], $colour['b']);
+                }
+                imagesetpixel($image, $x, $y, $colour);
             }
         }
         $this->gdImage = $image;
@@ -129,7 +142,7 @@ class SPRFrame extends SpriteFrame {
      * @param int $b blue
      * @return int|string
      */
-    private function rgbToSPR($r, $g, $b) {
+    private function rgbToSPR(int $r, int $g, int $b) {
         //start out with the maximum distance.
         $minDistance = ($r ^ 2)+($g ^ 2)+($b ^ 2);
         $minKey = 0;

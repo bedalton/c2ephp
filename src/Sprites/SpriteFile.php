@@ -21,7 +21,7 @@ abstract class SpriteFile {
     /**
      * @param string $filetype
      */
-    public function __construct($filetype) {
+    public function __construct(string $filetype) {
         $this->spriteFiletype = $filetype;
     }
     /// @endcond
@@ -31,7 +31,7 @@ abstract class SpriteFile {
      * @param int $frame The 0-based index of the frame to get.
      * @return SpriteFrame A SpriteFrame
      */
-    public function getFrame($frame) {
+    public function getFrame(int $frame) {
         return $this->frames[$frame];
     }
 
@@ -66,7 +66,13 @@ abstract class SpriteFile {
      * @endinternal
      */
     public function addFrame(SpriteFrame $frame) {
-        if ($this->spriteFiletype == substr(get_class($frame), 0, 3)) {
+        $className = get_class($frame);
+        $slashIndex = strrpos($className, '\\');
+        if ($slashIndex !== FALSE)
+            $className = substr($className, $slashIndex + 1, 3);
+        else
+            $className = substr($className, 0, 3);
+        if ($this->spriteFiletype == $className) {
             //$this->frames[$position] = $frame;
             $this->frames[] = $frame;
         } else {
@@ -83,7 +89,7 @@ abstract class SpriteFile {
      * backwards from the end of the frames array.
      * @throws Exception
      */
-    public function replaceFrame(SpriteFrame $frame, $position) {
+    public function replaceFrame(SpriteFrame $frame, int $position) {
         if ($position < 0) {
             $position = sizeof($this->frames) - $position;
         }
@@ -104,7 +110,7 @@ abstract class SpriteFile {
      *
      * @param int $frame The 0-based index of the frame to delete.
      */
-    public function deleteFrame($frame) {
+    public function deleteFrame(int $frame) {
         unset($this->frames[$frame]);
     }
 
@@ -116,7 +122,7 @@ abstract class SpriteFile {
      * @param int $frame The 0-based index of the frame to delete.
      * @return string A binary string containing a PNG.
      */
-    public function toPNG($frame) {
+    public function toPNG(int $frame) {
         return $this->frames[$frame]->toPNG();
     }
 }

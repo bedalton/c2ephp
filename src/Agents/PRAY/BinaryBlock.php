@@ -19,6 +19,7 @@ require_once(dirname(__FILE__) . '/PrayBlock.php');
 class BinaryBlock extends PrayBlock {
     /// @cond INTERNAL_DOCS
 
+	/** @var string */
     private $binaryData;
     /// @endcond
 
@@ -30,7 +31,7 @@ class BinaryBlock extends PrayBlock {
      * @param string $content The content of the block as a binary string.
      * @throws Exception
      */
-    public function __construct($type, $name, $content) {
+    public function __construct(string $type, string $name, string $content) {
         parent::__construct(null, $name, '', 0, $type);
         $this->binaryData = $content;
     }

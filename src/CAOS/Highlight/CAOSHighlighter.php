@@ -54,9 +54,9 @@ class CAOSHighlighter {
     private $caosFlowControls;
 
     private $scriptFormat;
-    private $scriptLines = array();
-    private $scriptSubroutines = array();
-    private $highlightedLines = array();
+    private $scriptLines = [];
+    private $scriptSubroutines = [];
+    private $highlightedLines = [];
 
     private $previousLineCode;
     private $currentLine;
@@ -73,7 +73,7 @@ class CAOSHighlighter {
      * @param string $format The format of the CAOS you intend to highlight.
      * @throws Exception
      */
-    public function __construct($format) {
+    public function __construct(string $format) {
         $this->scriptFormat = $format;
         switch($format) {
             case 'C2':
@@ -112,7 +112,7 @@ class CAOSHighlighter {
      * @param string $script the CAOS script as a string.
      * @return string
      */
-    public function highlightScript($script) {
+    public function highlightScript(string $script) {
         if (strpos($script, "\r") !== false) {
             $script = str_replace("\r\n", "\n", $script); //get rid of mac and windows newlines.
             $script = str_replace("\r", "\n", $script);
@@ -126,7 +126,7 @@ class CAOSHighlighter {
         //now that we have the lines, we can make the list of subroutines.
         $this->scanForSubroutines();
         $this->currentLine = 0;
-        $this->highlightedLines = array();
+        $this->highlightedLines = [];
         while (($line = $this->highlightNextLine()) !== false) {
 
             $this->highlightedLines[] = $line;
@@ -145,8 +145,8 @@ class CAOSHighlighter {
      * @param string $text
      * @return string
      */
-    private function smartRemoveMultipleSpaces($text) {
-        $newString = array();
+    private function smartRemoveMultipleSpaces(string $text) {
+        $newString = [];
         $inString = false;
         $inComment = false;
         for ($i = 0; $i < strlen($text); $i++) {
@@ -424,7 +424,7 @@ class CAOSHighlighter {
      * @param string $word
      * @return string word with highlight formatting
      */
-    private function tryToHighlightToken($word) {
+    private function tryToHighlightToken(string $word) {
         $lcword = strtolower($word);
         $matches = []; //used for C2 anim command preg_match
 
@@ -469,7 +469,7 @@ class CAOSHighlighter {
      * This function unindents code to the correct level if the current line begins with the given word.
      * @param string $firstWord The first word of the line
      */
-    private function setIndentForThisLine($firstWord) {
+    private function setIndentForThisLine(string $firstWord) {
         switch ($firstWord) {
             case 'scrp':
             case 'endm':
@@ -501,7 +501,7 @@ class CAOSHighlighter {
      * Sets the indent for the next line
      * @param string $firstword
      */
-    private function setIndentForNextLine($firstword) {
+    private function setIndentForNextLine(string $firstword) {
         switch ($firstword) {
             case 'scrp':
             case 'rscr':
@@ -537,19 +537,15 @@ class CAOSHighlighter {
      * @param string $firstword
      * @return string
      */
-    private function createIndentForThisLine($firstword) {
-        $indent = '';
-        if (in_array($firstword, array('scrp', 'rscr'))) {
+    private function createIndentForThisLine(string $firstword) {
+		if (in_array($firstword, array('scrp', 'rscr'))) {
             if (!empty($this->previousLineCode)) {
                 if ($this->previousLineCode{0} != '*') {
                     $indent = "\n";
                 }
             }
         }
-        for ($i = 0; $i < $this->currentIndent; $i++) {
-            $indent .= "\t";
-        }
-        return $indent;
+		return str_repeat("\t", $this->currentIndent);
     }
 
     /// @endcond

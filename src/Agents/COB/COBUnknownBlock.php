@@ -23,8 +23,8 @@ class COBUnknownBlock extends COBBlock {
      * @param string $contents The contents of the block
      * @throws Exception
      */
-    public function __construct($type, $contents) {
-        parent::__construct($type);
+    public function __construct(string $type, string $contents) {
+        parent::__construct($type, $contents);
         $this->contents = $contents;
     }
 
