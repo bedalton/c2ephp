@@ -43,13 +43,16 @@ class FileReader implements IReader {
 
 	/**
 	 * Reads a specific number of bytes, returning as string
-	 * @param int $length
+	 * @param int|null $length
 	 * @param bool $cpDecode decode CP-1252 text to UTF-8
 	 * @param bool $throwing throw exception on not-enough-bytes
 	 * @return string
 	 * @throws Exception
 	 */
-    public function read(int $length, bool $cpDecode = self::CP_DECODING_DEFAULT, bool $throwing = TRUE) {
+    public function read(?int $length, bool $cpDecode = self::CP_DECODING_DEFAULT, bool $throwing = TRUE) {
+		if (is_null($length)) {
+			throw new Exception("Cannot read bytes with null length");
+		}
         if ($this->getPosition() + $length > $this->size) {
             if ($throwing) {
                 $bytesPast = ($this->size - $this->getPosition());
@@ -65,11 +68,14 @@ class FileReader implements IReader {
     }
 
     /**
-     * @param int $length
+     * @param int|null $length
      * @return int
      * @throws Exception
      */
-    public function readInt(int $length) {
+    public function readInt(?int $length) {
+		if (is_null($length)) {
+			throw new Exception("Cannot read int with null request byte length");
+		}
         $int = 0;
         if (($this->getPosition() + $length) > $this->size) {
             throw new Exception("Cannot read int($length) past end of buffer");
@@ -102,15 +108,18 @@ class FileReader implements IReader {
 
     /**
      * Reads a section of the file stream from a given point
-     * @param int $start
-     * @param int|false $length
+     * @param int|null $start
+     * @param int|null $length
      * @return false|string
      * @throws Exception
      */
-    public function getSubString(int $start, $length = FALSE) {
+    public function getSubString(?int $start, ?int $length = NULL) {
+		if (is_null($start)) {
+			throw new Exception("Cannot get substring with null start position");
+		}
         $oldPosition = ftell($this->handle);
         fseek($this->handle, $start);
-        if ($length === false) {
+        if (is_null($length)) {
             $length = $this->size - $start;
         }
         $data = fread($this->handle, $length);
@@ -132,24 +141,32 @@ class FileReader implements IReader {
         return $string;
     }
 
-    /**
-     * Changes the current position in the reader's stream
-     *
-     * This is analogous to fseek in C or PHP.
-     * @param int $position
-     * @return void
-     */
-    public function seek(int $position) {
+	/**
+	 * Changes the current position in the reader's stream
+	 *
+	 * This is analogous to fseek in C or PHP.
+	 * @param int|null $position
+	 * @return void
+	 * @throws Exception
+	 */
+    public function seek(?int $position) {
+		if (is_null($position)) {
+			throw new Exception("Cannot seek to null position");
+		}
         fseek($this->handle, $position);
     }
 
-    /**
-     * Advances the position of the reader by $count.
-     *
-     * @param $count
-     * @return void
-     */
-    public function skip($count) {
+	/**
+	 * Advances the position of the reader by $count.
+	 *
+	 * @param int|null $count
+	 * @return void
+	 * @throws Exception
+	 */
+    public function skip(?int $count) {
+		if (is_null($count)) {
+			throw new Exception("Cannot skip bytes with null length");
+		}
         fseek($this->handle, $count, SEEK_CUR);
     }
 

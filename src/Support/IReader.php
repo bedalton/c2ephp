@@ -23,12 +23,12 @@ interface IReader {
     /**
      * Reads a string
      *
-     * @param int $length Length of the string to read in bytes
+     * @param int|null $length Length of the string to read in bytes
 	 * @param bool $cpDecode Decode CP1252 string to UTF-8
 	 * @param bool $throwing throw exception on not-enough-bytes
      * @return string|false
      */
-    public function read(int $length, bool $cpDecode = TRUE, bool $throwing = TRUE);
+    public function read(?int $length, bool $cpDecode = TRUE, bool $throwing = TRUE);
 
     /**
      * Gets a substring
@@ -39,11 +39,11 @@ interface IReader {
      * memory-wise, but it simplifies the code and c2e files don't
      * tend to get big enough to make this inefficiency a concern on
      * any reasonably modern hardware.
-     * @param int $start
-     * @param bool|int $length
+     * @param int|null $start
+     * @param int|null $length
      * @return string
      */
-    public function getSubString(int $start, $length = FALSE);
+    public function getSubString(?int $start, ?int $length = NULL);
 
     /**
      * Gets the position of the cursor
@@ -63,18 +63,18 @@ interface IReader {
      * Changes the current position in the reader's stream
      *
      * This is analogous to fseek in C or PHP.
-     * @param int $position
+     * @param int|null $position
      * @return void
      */
-    public function seek(int $position);
+    public function seek(?int $position);
 
     /**
      * Advances the position of the reader by $count.
      *
-     * @param int $count
+     * @param int|null $count
      * @return void
      */
-    public function skip(int $count);
+    public function skip(?int $count);
 
     /**
      * Reads a c-style string at the current position.
