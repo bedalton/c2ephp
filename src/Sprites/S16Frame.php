@@ -46,7 +46,7 @@ class S16Frame extends SpriteFrame {
             $this->gdImage = $reader;
             $this->decoded = true;
             $this->encoding = $encoding;
-            parent::__construct(imagesx($reader), imagesy($reader));
+            parent::__construct(imagesx($reader), imagesy($reader), TRUE);
 
         }
     }
