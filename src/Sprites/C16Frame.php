@@ -204,10 +204,10 @@ class C16Frame extends SpriteFrame {
                 }
             }
             //line terminating zero tag.
-            $data .= pack('xx', 0);
+            $data .= "\0\0";
         }
         //image terminating zero tag
-        $data .= pack('xx', 0);
+        $data .= "\0\0";
         return ['lineOffsets' => $lineOffsets, 'data' => $data];
     }
 }
