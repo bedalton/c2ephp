@@ -22,9 +22,9 @@ class C16File extends SpriteFile {
      * @param IReader|null $reader The reader to read the sprites from. Can be null.
      * @throws Exception
      */
-    public function __construct(IReader $reader = null) {
+    public function __construct(IReader $reader = null, ?string $encoding = NULL) {
+		parent::__construct('C16');
         if ($reader != null) {
-            parent::__construct('C16');
             $buffer = $reader->readInt(4);
             if (($buffer & 1) == 1) {
                 $this->encoding = '565';
@@ -46,7 +46,9 @@ class C16File extends SpriteFile {
             for ($x = 0; $x < $frameCount; $x++) {
                 $this->addFrame(new C16Frame($reader, $this->encoding));
             }
-        }
+        } else {
+			$this->encoding = $encoding === '555' ? '555' : '565';
+		}
     }
 
     /**
