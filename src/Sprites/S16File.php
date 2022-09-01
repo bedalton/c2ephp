@@ -24,26 +24,27 @@ class S16File extends SpriteFile {
 
     /**
      * Instantiates a new S16File
-     * @param IReader $reader an IReader to create the S16File from.
+     * @param IReader|null $reader an IReader to create the S16File from.
      * @throws Exception
      */
-    public function __construct(IReader $reader)
+    public function __construct(?IReader $reader = NULL)
     {
         parent::__construct('S16');
-        $this->reader = $reader;
-        $buffer = $this->reader->readInt(4);
-        if ($buffer == 1) {
-            $this->encoding = "565";
-        } else if ($buffer == 0) {
-            $this->encoding = "555";
-        } else {
-            throw new Exception("File encoding not recognised. (".$buffer.'|'.$this->reader->getPosition().')');
-        }
-        $this->frameCount = $this->reader->readInt(2);
-        for ($i = 0; $i < $this->frameCount; $i++)
-        {
-            $this->addFrame(new S16Frame($this->reader, $this->encoding));
-        }
+		if ($reader != null) {
+			$this->reader = $reader;
+			$buffer = $this->reader->readInt(4);
+			if ($buffer == 1) {
+				$this->encoding = "565";
+			} else if ($buffer == 0) {
+				$this->encoding = "555";
+			} else {
+				throw new Exception("File encoding not recognised. (" . $buffer . '|' . $this->reader->getPosition() . ')');
+			}
+			$this->frameCount = $this->reader->readInt(2);
+			for ($i = 0; $i < $this->frameCount; $i++) {
+				$this->addFrame(new S16Frame($this->reader, $this->encoding));
+			}
+		}
     }
 
     /**

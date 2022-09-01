@@ -18,6 +18,7 @@ class SPRFrame extends SpriteFrame {
     private $offset;
     private $reader;
     public static $sprToRGB;
+	private $keepBlack = TRUE;
 
     /// @endcond
 
@@ -33,6 +34,24 @@ class SPRFrame extends SpriteFrame {
      * @throws Exception
      */
     public function __construct($reader, int $width = 0, int $height = 0, ?int $offset = NULL) {
+
+
+		//initialise palette if necessary.
+		if (empty(self::$sprToRGB)) {
+			$json = dirname(__FILE__).'/true-palette.json';
+			if (file_exists($json)) {
+				self::$sprToRGB = json_decode(file_get_contents($json), TRUE);
+			} else {
+				$paletteReader = new FileReader(dirname(__FILE__) . '/palette.dta');
+				for ($i = 0; $i < 256; $i++) {
+					self::$sprToRGB[$i] = array('r' => $paletteReader->readInt(1) * 4, 'g' => $paletteReader->readInt(1) * 4, 'b' => $paletteReader->readInt(1) * 4);
+				}
+				unset($paletteReader);
+			}
+			if (count(self::$sprToRGB) < 255) {
+				throw new Exception("SPR Palette data is too shallow. Not enough color entries found. Expected 255; Found: " . count(self::$sprToRGB));
+			}
+		}
         if ($reader instanceof IReader) {
             $this->reader = $reader;
             parent::__construct($width, $height);
@@ -41,20 +60,11 @@ class SPRFrame extends SpriteFrame {
             } else {
                 $this->offset = $this->reader->getPosition();
             }
-
-            //initialise palette if necessary.
-            if (empty(self::$sprToRGB)) {
-                $paletteReader = new FileReader(dirname(__FILE__).'/palette.dta');
-                for ($i = 0; $i < 256; $i++) {
-                    self::$sprToRGB[$i] = array('r'=>$paletteReader->readInt(1)*4, 'g'=>$paletteReader->readInt(1)*4, 'b'=>$paletteReader->readInt(1)*4);
-                }
-                unset($paletteReader);
-				if (count(self::$sprToRGB) < 255) {
-					throw new Exception("SPR Palette data is too shallow. Not enough color entries found");
-				}
-            }
         } else if (get_resource_type($reader) == 'gd') {
             parent::__construct(imagesx($reader), imagesy($reader), true);
+			if (self::hasTransparency($reader)) {
+				$this->keepBlack = TRUE;
+			}
             $this->gdImage = $reader;
         } else {
             throw new Exception('$reader was not an IReader or a gd image.');
@@ -90,10 +100,11 @@ class SPRFrame extends SpriteFrame {
     protected function decode() {
         $image = imagecreatetruecolor($this->getWidth(), $this->getHeight());
         imagesavealpha($image, true);
+		imagealphablending($image, true);
         $transparent = imagecolorallocatealpha($image, 0, 0, 0, 127);
         imagefill($image, 0, 0, $transparent);
         $this->reader->seek($this->offset);
-
+		$this->keepBlack = TRUE;
         for ($y = 0; $y < $this->getHeight(); $y++)
         {
             for ($x = 0; $x < $this->getWidth(); $x++)
@@ -126,7 +137,12 @@ class SPRFrame extends SpriteFrame {
         for ($y = 0; $y < $this->getHeight(); $y++) {
             for ($x = 0; $x < $this->getWidth(); $x++) {
                 $color = $this->getPixel($x, $y);
-                $data .= pack('C', $this->rgbToSPR($color['red'], $color['green'], $color['blue']));
+				if ($color['alpha'] >= 64) {
+					$color = 0;
+				} else {
+					$color = $this->rgbToSPR($color['red'], $color['green'], $color['blue'], $this->keepBlack);
+				}
+                $data .= pack('C', $color);
             }
         }
         return $data;
@@ -142,12 +158,18 @@ class SPRFrame extends SpriteFrame {
      * @param int $b blue
      * @return int|string
      */
-    private function rgbToSPR(int $r, int $g, int $b) {
+    private function rgbToSPR(int $r, int $g, int $b, bool $keepBlack) {
         //start out with the maximum distance.
         $minDistance = ($r ^ 2)+($g ^ 2)+($b ^ 2);
         $minKey = 0;
         foreach (self::$sprToRGB as $key => $colour) {
-            $distance = pow(($r-$colour['r']), 2)+pow(($g-$colour['g']), 2)+pow(($b-$colour['b']), 2);
+			if ($key === 0 && $keepBlack) {
+				continue;
+			}
+			if (array_sum(array_values(array_slice($colour, 0, 3))) + $r + $g + $b === 0) {
+				return $key;
+			}
+			$distance = pow(($r-$colour['r']), 2)+pow(($g-$colour['g']), 2)+pow(($b-$colour['b']), 2);
             if ($distance == 0) {
                 return $key;
             } else if ($distance < $minDistance) {
@@ -158,4 +180,35 @@ class SPRFrame extends SpriteFrame {
         return $minKey;
     }
     /// @endcond
+
+	private static function hasTransparency($gdImage) {
+		$width = imagesx($gdImage);
+		$height = imagesy($gdImage);
+		// Check corners first as they are most likely to be transparent
+		$corners = [
+			[0, 0],
+			[0, $height - 1],
+			[$width - 1, 0],
+			[$width - 1, $height - 1]
+		];
+		$isTransparent = function($gdImage, $x, $y) {
+			$color = imagecolorat($gdImage, $x, $y);
+			$transparency = ($color >> 24) & 0x7F;
+			return $transparency >= 64;
+		};
+		foreach ($corners as [$x, $y]) {
+			if ($isTransparent($gdImage, $x, $y)) {
+				return TRUE;
+			}
+		}
+
+		for($y = 0; $y < $height; $y++) {
+			for ($x = 0; $x < $width; $x++) {
+				if ($isTransparent($gdImage, $x, $y)) {
+					return TRUE;
+				}
+			}
+		}
+		return FALSE;
+	}
 }
