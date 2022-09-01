@@ -16,19 +16,22 @@ class SPRFile extends SpriteFile {
     /**
      * Instantiates a new SPRFile
      * Reads in the IReader and creates SPRFrames as required.
-     * @param IReader $reader An IReader to read from.
+     * @param IReader|null $reader An IReader to read from.
      * @throws Exception
      */
-    public function __construct(IReader $reader) {
+    public function __construct(?IReader $reader = NULL) {
         parent::__construct('SPR');
-        $frameCount = $reader->readInt(2);
 
-        for ($i = 0; $i < $frameCount; $i++) {
-            $offset = $reader->readInt(4);
-            $width = $reader->readInt(2);
-            $height = $reader->readInt(2);
-            $this->addFrame(new SPRFrame($reader, $width, $height, $offset));
-        }
+		if ($reader != null) {
+			$frameCount = $reader->readInt(2);
+
+			for ($i = 0; $i < $frameCount; $i++) {
+				$offset = $reader->readInt(4);
+				$width = $reader->readInt(2);
+				$height = $reader->readInt(2);
+				$this->addFrame(new SPRFrame($reader, $width, $height, $offset));
+			}
+		}
     }
 
     /**
