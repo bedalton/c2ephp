@@ -60,7 +60,7 @@ class SPRFrame extends SpriteFrame {
             } else {
                 $this->offset = $this->reader->getPosition();
             }
-        } else if (get_resource_type($reader) == 'gd') {
+        } else if (SpriteFrame::isGD($reader)) {
             parent::__construct(imagesx($reader), imagesy($reader), true);
 			if (self::hasTransparency($reader)) {
 				$this->keepBlack = TRUE;

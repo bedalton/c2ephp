@@ -3,6 +3,7 @@
 namespace C2ePhp\Sprites;
 
 use Exception;
+use GdImage;
 use ReflectionClass;
 
 /**
@@ -45,6 +46,10 @@ abstract class SpriteFrame {
         $this->decoded = $decoded;
     }
 
+	protected static function isGD($resource) {
+		return $resource instanceof \GdImage || (is_resource($resource) && get_resource_type($resource) == 'gd');
+	}
+
     protected function hasBeenDecoded() {
         return $this->decoded;
     }
@@ -53,7 +58,7 @@ abstract class SpriteFrame {
 
     /**
      * Gets the GD Image resource for this sprite frame.
-     * @return resource GD image resource. See http://php.net/image
+     * @return resource|GdImage GD image resource. See http://php.net/image
      */
     public function getGDImage() {
         $this->ensureDecoded();

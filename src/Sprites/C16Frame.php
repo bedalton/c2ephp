@@ -4,6 +4,7 @@ namespace C2ePhp\Sprites;
 
 use C2ePhp\Support\IReader;
 use Exception;
+use GdImage;
 
 /**
  * Class for a single image in a C16File
@@ -42,13 +43,10 @@ class C16Frame extends SpriteFrame {
             for ($x = 0; $x < ($height - 1); $x++) {
                 $this->lineOffset[$x] = $this->reader->readInt(4);
             }
-        } else if (is_resource($reader)) {
-            if (get_resource_type($reader) == 'gd') {
-
-                $this->encoding = ($encoding == '555') ? '555' : '565';
-                parent::__construct(imagesx($reader), imagesy($reader), true);
-                $this->gdImage = $reader;
-            }
+        } else if (SpriteFrame::isGD($reader)) {
+            $this->encoding = ($encoding == '555') ? '555' : '565';
+            parent::__construct(imagesx($reader), imagesy($reader), true);
+            $this->gdImage = $reader;
         } else {
             throw new Exception('$reader must be an IReader or gd image resource.');
         }
