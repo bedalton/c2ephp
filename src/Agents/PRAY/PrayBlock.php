@@ -118,8 +118,12 @@ abstract class PrayBlock {
 		if ($this->isFlagSet(PRAY_FLAG_ZLIB_COMPRESSED)) {
 			try {
 				$content = gzuncompress($content);
-			} catch(Exception $e) {
-				$content = NULL;
+			} catch(Exception) {
+				try {
+					$content = @gzinflate($content);
+				} catch(Exception) {
+					$content = NULL;
+				}
 			}
 		}
 
