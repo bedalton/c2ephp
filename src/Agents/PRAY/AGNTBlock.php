@@ -4,6 +4,7 @@ namespace C2ePhp\Agents\PRAY;
 
 use C2ePhp\Sprites\C16File;
 use C2ePhp\Sprites\S16File;
+use C2ePhp\Sprites\S32File;
 use C2ePhp\Sprites\SpriteFrame;
 use C2ePhp\Support\StringReader;
 use Exception;
@@ -251,6 +252,12 @@ class AGNTBlock extends TagBlock {
 			throw new Exception('No PRAY file to get the icon from!');
 		}
 		$iconBlock = $prayFile->getBlockByName($animationFile);
+        if (!$iconBlock) {
+            $iconBlock = $prayFile->getBlockByName(preg_replace('/.c16$/i', '.s32', $animationFile));
+        }
+        if (!$iconBlock) {
+            $iconBlock = $prayFile->getBlockByName(preg_replace('/.c16$/i', '.s16', $animationFile));
+        }
 		$frame = $animationFirstImage + $animationString;
 		if ($iconBlock == null || $iconBlock->getType() != 'FILE') {
 			$fileName = "$animationFile[$frame]";
@@ -259,11 +266,13 @@ class AGNTBlock extends TagBlock {
 		$type = strtolower(substr($animationFile, -3));
 		$icon = null;
 		$spriteData = new StringReader($iconBlock->getData());
-		if ($type == 'c16') {
-			$icon = new C16File($spriteData);
-		} else if ($type == 's16') {
-			$icon = new S16File($spriteData);
-		}
+		$icon = match($type) {
+			"c16" => new C16File($spriteData),
+			"s32" => new S32File($spriteData),
+			"s16" => new S16File($spriteData),
+			default => NULL;
+        } 
+
 		if ($icon == null) {
 			throw new Exception("For one reason or another, couldn't make a sprite file for the agent.");
 		}

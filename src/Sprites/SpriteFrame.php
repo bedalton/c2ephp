@@ -168,6 +168,8 @@ abstract class SpriteFrame {
             return $this;
         }
         switch ($type) {
+            case 'S32':
+                return new S32Frame($this->getGDImage());
             case 'C16':
                 return new C16Frame($this->getGDImage());
             case 'S16':
