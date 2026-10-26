@@ -22,7 +22,7 @@ class S32File extends SpriteFile {
      * @param IReader|null $reader The reader to read the sprites from. Can be null.
      * @throws Exception
      */
-    public function __construct(IReader $reader = null, ?string $encoding = NULL) {
+    public function __construct(?IReader $reader = null, ?string $encoding = NULL) {
 		parent::__construct('S32');
         if ($reader != null) {
             $buffer = $reader->readInt(4);

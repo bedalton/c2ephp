@@ -211,7 +211,7 @@ class COBAgentBlock extends COBBlock {
      * @param string|null $type one of the COB_DEPENDENCY_* constants, defined above.
      * @return COBDependency[] An array of COBDependency objects
      */
-    public function getDependencies(string $type = null) {
+    public function getDependencies(?string $type = null) {
 		$dependencies = $this->dependencies ?? [];
         $dependenciesToReturn = [];
         foreach ($dependencies as $dependency) {

@@ -51,7 +51,7 @@ class COB {
 	 * @param IReader|null $reader The reader which contains the cob to read from. Can be null.
 	 * @throws Exception
 	 */
-	public function __construct(IReader $reader = null) {
+	public function __construct(?IReader $reader = null) {
 		if ($reader != null) {
 			$this->loadCOB($reader);
 		}
