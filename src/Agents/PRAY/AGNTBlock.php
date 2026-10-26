@@ -137,7 +137,7 @@ class AGNTBlock extends TagBlock {
 	 * @return PrayDependency
 	 */
 	public function getDependency(int $dependency) {
-		$file = $this->getIntTag('Dependency ' . $dependency);
+		$file = $this->getStringTag('Dependency ' . $dependency);
 		$category = $this->getIntTag('Dependency Category ' . $dependency);
 		return new PrayDependency($category, $file);
 	}
@@ -270,8 +270,8 @@ class AGNTBlock extends TagBlock {
 			"c16" => new C16File($spriteData),
 			"s32" => new S32File($spriteData),
 			"s16" => new S16File($spriteData),
-			default => NULL;
-        } 
+			default => NULL,
+		};
 
 		if ($icon == null) {
 			throw new Exception("For one reason or another, couldn't make a sprite file for the agent.");
